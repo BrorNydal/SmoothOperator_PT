@@ -1,0 +1,11 @@
+﻿  Using 'git status' to determine working set for adaptive non-unity build (C:\Users\BrorN\Documents\Unreal Projects).
+  Creating makefile for Prototype_SOEditor (source directory changed)
+  Using Visual Studio 2017 14.16.27023 toolchain (C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023) and Windows 10.0.17763.0 SDK (C:\Program Files (x86)\Windows Kits\10).
+  Building 3 actions with 8 processes...
+    [1/3] ToddlerCharacter.cpp
+    [2/3] UE4Editor-Prototype_SO.lib
+       Creating library C:\Users\BrorN\Documents\Unreal Projects\Prototype_SO\Intermediate\Build\Win64\UE4Editor\Development\Prototype_SO\UE4Editor-Prototype_SO.lib and object C:\Users\BrorN\Documents\Unreal Projects\Prototype_SO\Intermediate\Build\Win64\UE4Editor\Development\Prototype_SO\UE4Editor-Prototype_SO.exp
+    [3/3] UE4Editor-Prototype_SO.dll
+       Creating library C:\Users\BrorN\Documents\Unreal Projects\Prototype_SO\Intermediate\Build\Win64\UE4Editor\Development\Prototype_SO\UE4Editor-Prototype_SO.suppressed.lib and object C:\Users\BrorN\Documents\Unreal Projects\Prototype_SO\Intermediate\Build\Win64\UE4Editor\Development\Prototype_SO\UE4Editor-Prototype_SO.suppressed.exp
+  Deploying Prototype_SOEditor Win64 Development...
+  Total build time: 6.97 seconds (Parallel executor: 2.52 seconds)
