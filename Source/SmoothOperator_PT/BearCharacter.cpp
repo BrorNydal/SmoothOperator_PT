@@ -45,7 +45,7 @@ void ABearCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	InputComponent->BindAction("Swap", IE_Pressed, this, &ABearCharacter::Swap);
 }
 
-void ABearCharacter::Interact()
+void ABearCharacter::Interact() //Find all toddlers, set toddler status
 {
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AToddlerCharacter::StaticClass(), AllToddlers);
 	TheToddler = Cast<AToddlerCharacter>(AllToddlers[0]);	
@@ -55,7 +55,7 @@ void ABearCharacter::Interact()
 	IsRiding = true;
 }
 
-void ABearCharacter::Launch()
+void ABearCharacter::Launch() //Find all toddlers, possess the toddler, set set toddler status, 'jump' in bpBearCharacter
 {	
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AToddlerCharacter::StaticClass(), AllToddlers);
 	TheToddler = Cast<AToddlerCharacter>(AllToddlers[0]);
@@ -69,9 +69,8 @@ void ABearCharacter::Launch()
 
 
 
-void ABearCharacter::Swap()
-{
-	//Does Not Possess
+void ABearCharacter::Swap() //Find all toddlers, possess toddler
+{	
 	if ((IsRiding == false) && (GetMovementComponent()->IsMovingOnGround() == true))
 	{
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AToddlerCharacter::StaticClass(), AllToddlers);

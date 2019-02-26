@@ -29,20 +29,20 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		USphereComponent *InteractionRadius;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite) 
+		USphereComponent *InteractionRadius; //Radius that will in the future decide what the character can interact with
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool ToddlerCanInteract = false;
+		bool ToddlerCanInteract = false; // Bool that will decide if the character can interact
 
 	UFUNCTION(BlueprintCallable)
 		void Interact();	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool RightRotation = false;
+		bool RightRotation = false;	//Bool to decide which driection to turn (animation)
 
 	UFUNCTION(BlueprintCallable)
-		void Swap();		
+		void Swap();		//Swapping characters function
 
 	TArray<AActor*> AllBears;
 	ABearCharacter *TheBear;

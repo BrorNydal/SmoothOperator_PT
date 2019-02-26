@@ -34,21 +34,21 @@ public:
 		USphereComponent *InteractionRadius;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool IsRiding = false;
+		bool IsRiding = false; //Is toddler riding bear
 
 	UFUNCTION(BlueprintCallable) //Called in bp subclass
 		void Interact();
 
-	UFUNCTION(BlueprintCallable) //Called in bp subclass
+	UFUNCTION(BlueprintCallable) //Launch toddler in the air when IsRiding == true
 		void Launch();	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) //For future use when adding animation for turning, this be the bool to decide which turn animation to apply (left/right)
 		bool RightRotation = false;
 
 	UFUNCTION(BlueprintCallable)
-		void Swap();	
+		void Swap();	//Swap between characters
 	
-	TSubclassOf<AToddlerCharacter> bpToddler;
+	//TSubclassOf<AToddlerCharacter> bpToddler;
 
 	TArray<AActor*> AllToddlers;
 	AToddlerCharacter *TheToddler;

@@ -14,7 +14,7 @@ AToddlerCharacter::AToddlerCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	InteractionRadius = CreateDefaultSubobject<USphereComponent>(TEXT("InteractionRadius"));
+	InteractionRadius = CreateDefaultSubobject<USphereComponent>(TEXT("InteractionRadius")); 
 	InteractionRadius->SetSphereRadius(64.0f);
 }
 
@@ -40,10 +40,10 @@ void AToddlerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	InputComponent->BindAction("Swap", IE_Pressed, this, &AToddlerCharacter::Swap);
 }
 
-void AToddlerCharacter::Interact()
+void AToddlerCharacter::Interact() //Get all bears, possess, set self non-interactable to the world
 {
 	
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllBears);
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllBears); //Get all bears
 		TheBear = Cast<ABearCharacter>(AllBears[0]);
 
 		SetActorHiddenInGame(true);
@@ -53,12 +53,12 @@ void AToddlerCharacter::Interact()
 	
 }
 
-void AToddlerCharacter::Swap()
+void AToddlerCharacter::Swap() //Get all bears, possess bear
 {
 	//Does Not Possess
 	if (GetMovementComponent()->IsMovingOnGround() == true)
 	{
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllBears);
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllBears); //Get all bears
 		TheBear = Cast<ABearCharacter>(AllBears[0]);
 		UE_LOG(LogTemp, Warning, TEXT("Trying to Swap"));
 		Controller->Possess(TheBear);
