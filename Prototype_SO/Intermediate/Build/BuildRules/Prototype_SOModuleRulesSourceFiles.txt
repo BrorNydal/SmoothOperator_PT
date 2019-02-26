@@ -1,3 +1,0 @@
-C:\Users\BrorN\Documents\Unreal Projects\Prototype_SO\Source\Prototype_SO\Prototype_SO.Build.cs
-C:\Users\BrorN\Documents\Unreal Projects\Prototype_SO\Source\Prototype_SO.Target.cs
-C:\Users\BrorN\Documents\Unreal Projects\Prototype_SO\Source\Prototype_SOEditor.Target.cs
