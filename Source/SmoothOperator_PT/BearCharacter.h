@@ -30,14 +30,11 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		USphereComponent *InteractionRadius;
+	
+	USphereComponent *InteractionRadius;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool IsRiding = false; //Is toddler riding bear
-
-	UFUNCTION(BlueprintCallable) //Called in bp subclass
-		void Interact();
+		bool IsRiding = false; //Is toddler riding bear	
 
 	UFUNCTION(BlueprintCallable) //Launch toddler in the air when IsRiding == true
 		void Launch();	
@@ -45,12 +42,30 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) //For future use when adding animation for turning, this be the bool to decide which turn animation to apply (left/right)
 		bool RightRotation = false;
 
-	UFUNCTION(BlueprintCallable)
-		void Swap();	//Swap between characters
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USkeletalMeshComponent *BearSocketMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool BearCanInteract = false; //Is toddler riding bear
+
+	UFUNCTION()
+		void Interactable(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+			UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
+			bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+		void NonInteractable(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+			UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	
-	//TSubclassOf<AToddlerCharacter> bpToddler;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		AActor *InteractableActor;
+
+	TSubclassOf<AToddlerCharacter> bpToddler;
 
 	TArray<AActor*> AllToddlers;
 	AToddlerCharacter *TheToddler;
 
+private:
+	void Swap();	//Swap between characters
+	void Interact(); //Interact with Characters and Objects
 };

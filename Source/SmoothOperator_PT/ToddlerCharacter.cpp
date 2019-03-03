@@ -7,6 +7,11 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/ShapeComponent.h"
+#include "Engine/Engine.h"
+#include "GameFramework/Character.h"
+#include "Components/SkeletalMeshComponent.h"
+
 
 // Sets default values
 AToddlerCharacter::AToddlerCharacter()
@@ -15,7 +20,10 @@ AToddlerCharacter::AToddlerCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	InteractionRadius = CreateDefaultSubobject<USphereComponent>(TEXT("InteractionRadius")); 
-	InteractionRadius->SetSphereRadius(64.0f);
+	InteractionRadius->SetupAttachment(RootComponent);
+	InteractionRadius->SetSphereRadius(64.0f);		
+	InteractionRadius->OnComponentBeginOverlap.AddDynamic(this, &AToddlerCharacter::Interactable);
+	InteractionRadius->OnComponentEndOverlap.AddDynamic(this, &AToddlerCharacter::NonInteractable);
 }
 
 // Called when the game starts or when spawned
@@ -30,6 +38,7 @@ void AToddlerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
+	
 }
 
 // Called to bind functionality to input
@@ -38,32 +47,88 @@ void AToddlerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	InputComponent->BindAction("Swap", IE_Pressed, this, &AToddlerCharacter::Swap);
+	InputComponent->BindAction("Interact", IE_Pressed, this, &AToddlerCharacter::Interact);	
 }
 
-void AToddlerCharacter::Interact() //Get all bears, possess, set self non-interactable to the world
-{
-	
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllBears); //Get all bears
-		TheBear = Cast<ABearCharacter>(AllBears[0]);
+void AToddlerCharacter::Interactable(UPrimitiveComponent *OverlappedComp, AActor *OtherActor,
+								UPrimitiveComponent *OtherComp, int32 OtherBodyIndex, 
+								bool bFromSweep, const FHitResult& SweepResult) //BeginOverlap
+{	
+	GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, TEXT("Hello, Toddler Overlapping"));
 
-		SetActorHiddenInGame(true);
-		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		TheBear->IsRiding = true;
-		Controller->Possess(TheBear);
-	
+	if (OtherActor && OtherActor != this && OtherComp)
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("BeginOverlap"));
+		if (OtherActor->IsA(ABearCharacter::StaticClass()))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Toddler_Begin_Overlap_Bear"));
+			InteractableActor = OtherActor;
+			ToddlerCanInteract = true;
+		}//Must use else if-statements after this, so bool ToddlerCanInteract works Correctly
+		
+	}
+}
+
+void AToddlerCharacter::NonInteractable(UPrimitiveComponent *OverlappedComp, AActor *OtherActor,
+										UPrimitiveComponent *OtherComp, int32 OtherBodyIndex) //EndOverlap
+{
+	GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, TEXT("Bye, Toddler NOT Overlapping"));
+
+	if (OtherActor && OtherActor != this && OtherComp)
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("BeginOverlap"));
+		if (OtherActor->IsA(ABearCharacter::StaticClass()))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Toddler_End_Overlap_Bear"));
+			ToddlerCanInteract = false;		
+			//InteractableActor->ClearActorLabel();
+		}//Must use else if-statements after this, so bool ToddlerCanInteract works Correctly
+		
+	}
 }
 
 void AToddlerCharacter::Swap() //Get all bears, possess bear
-{
-	//Does Not Possess
+{	
 	if (GetMovementComponent()->IsMovingOnGround() == true)
 	{
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllBears); //Get all bears
 		TheBear = Cast<ABearCharacter>(AllBears[0]);
-		UE_LOG(LogTemp, Warning, TEXT("Trying to Swap"));
+		GEngine->AddOnScreenDebugMessage(0, 0.5f, FColor::Blue, TEXT("Swapping . . . "));
+		Controller->Possess(TheBear);		
+	}	
+}
+
+void AToddlerCharacter::RideBear()
+{
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllBears); //Get all bears
+	TheBear = Cast<ABearCharacter>(AllBears[0]);
+
+	SetActorHiddenInGame(true);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	TheBear->IsRiding = true;
+
+	if (Controller)
 		Controller->Possess(TheBear);
+}
+
+void AToddlerCharacter::Interact() //Trying to replicate the blueprint
+{
+	if (GetCharacterMovement()->IsMovingOnGround() == true && ToddlerCanInteract == true)
+	{
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllBears); //Get all bears
+		TheBear = Cast<ABearCharacter>(AllBears[0]);
+		
+		if (TheBear == InteractableActor)
+		{
+			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			AttachToComponent(TheBear->GetMesh(), FAttachmentTransformRules::KeepWorldTransform);
+			SetActorLocation(TheBear->GetActorLocation());
+			SetActorHiddenInGame(true);
+			TheBear->IsRiding = true;	
+			if(Controller)
+				Controller->Possess(TheBear);
+		}
 	}
-	
 }
 
 

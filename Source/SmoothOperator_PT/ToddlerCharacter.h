@@ -29,14 +29,20 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) 
+	
 		USphereComponent *InteractionRadius; //Radius that will in the future decide what the character can interact with
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool ToddlerCanInteract = false; // Bool that will decide if the character can interact
 
-	UFUNCTION(BlueprintCallable)
-		void Interact();	
+	UFUNCTION()
+		void Interactable(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+						UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, 
+						bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+		void NonInteractable(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+							UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool RightRotation = false;	//Bool to decide which driection to turn (animation)
@@ -44,6 +50,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void Swap();		//Swapping characters function
 
+	UFUNCTION(BlueprintCallable)
+		void RideBear();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		AActor *InteractableActor;
+
 	TArray<AActor*> AllBears;
 	ABearCharacter *TheBear;
+
+private:
+	void Interact();
+	bool RidingBear = false;
 };
