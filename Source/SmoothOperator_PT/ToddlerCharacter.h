@@ -36,6 +36,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool ToddlerCanInteract = false; // Bool that will decide if the character can interact
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool Launched = false; //Has Toddler been launched
+
 	UFUNCTION()
 		void Interactable(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 						UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, 

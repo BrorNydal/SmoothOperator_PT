@@ -41,12 +41,11 @@ void ABearCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	if (NumberOfCrystals == 4)
+	if (PickedUpCrystals == 4)
 	{
 		AllCrystalsCollected = true;
 		GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, TEXT("All Crystals Collected"));
-	}
-	
+	}	
 }
 
 // Called to bind functionality to input
@@ -67,13 +66,14 @@ void ABearCharacter::Launch() //Find all toddlers, possess the toddler, set set 
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AToddlerCharacter::StaticClass(), AllToddlers);
 		TheToddler = Cast<AToddlerCharacter>(AllToddlers[0]);
 		
-		Controller->Possess(TheToddler);
-		TheToddler->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-		TheToddler->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		TheToddler->SetActorLocation(GetActorLocation() + FVector(0.0f, 0.0f, 30.0f));
+		Controller->Possess(TheToddler); //Possess Toddler
+		TheToddler->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform); //Keep initial transform
+		TheToddler->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics); //Set 'No Collision' -> 'Normal Collision'
+		TheToddler->SetActorLocation(GetActorLocation() + FVector(0.0f, 0.0f, 30.0f)); //Set Initial launch position
 		TheToddler->SetActorHiddenInGame(false);
 		IsRiding = false;	
-		TheToddler->Jump();
+		TheToddler->Jump(); //Call character pre-built 'jump' function
+		TheToddler->Launched = true;		
 	}
 }
 
@@ -91,6 +91,7 @@ void ABearCharacter::Interactable(UPrimitiveComponent * OverlappedComp, AActor *
 			InteractableActor = OtherActor;
 			BearCanInteract = true;
 		}//Must use else if-statements after this, so bool ToddlerCanInteract works Correctly
+
 		else if (OtherActor->IsA(ACrystalActor::StaticClass()))
 		{
 			//UE_LOG(LogTemp, Warning, TEXT("Bear_Begin_Overlap_Crystal"));
@@ -108,7 +109,7 @@ void ABearCharacter::NonInteractable(UPrimitiveComponent * OverlappedComp, AActo
 	if (OtherActor && OtherActor != this && OtherComp)
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("BeginOverlap"));
-		if (OtherActor->IsA(AToddlerCharacter::StaticClass()))
+		if ((OtherActor->IsA(AToddlerCharacter::StaticClass())) && (InteractableActor->IsA(AToddlerCharacter::StaticClass())))
 		{
 			//UE_LOG(LogTemp, Warning, TEXT("Bear_End_Overlap_Toddler"));
 			BearCanInteract = false;
@@ -120,27 +121,34 @@ void ABearCharacter::NonInteractable(UPrimitiveComponent * OverlappedComp, AActo
 
 
 void ABearCharacter::Interact() 
-{
+{	
 	if (GetCharacterMovement()->IsMovingOnGround() == true && BearCanInteract == true) //If Bear is on ground, and has an interactable object in range
 	{
-		if (TheToddler == InteractableActor) 
+		if (InteractableActor->IsA(AToddlerCharacter::StaticClass())) 
 		{
 			UGameplayStatics::GetAllActorsOfClass(GetWorld(), AToddlerCharacter::StaticClass(), AllToddlers);
 			TheToddler = Cast<AToddlerCharacter>(AllToddlers[0]);
 
-			TheToddler->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-			TheToddler->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepWorldTransform);
-			TheToddler->SetActorLocation(GetActorLocation());
+			TheToddler->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision); //Set Collision 'Normal Collision' -> 'No Collision'
+			TheToddler->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepWorldTransform); //Keep Bear transform
+			//TheToddler->SetActorLocation(GetActorLocation());
 			TheToddler->SetActorHiddenInGame(true);
-			IsRiding = true;
+			IsRiding = true;			
 		}
+
 		else if (InteractableActor->IsA(ACrystalActor::StaticClass()))
 		{
 			InteractableActor->Destroy();
-			NumberOfCrystals += 1;
-			FString CrystalName = FString("Crystal" + FString::FromInt(NumberOfCrystals));
+			PickedUpCrystals += 1;
+			FString CrystalName = FString("Crystal" + FString::FromInt(PickedUpCrystals));
 			Crystals.Add(CrystalName);
 			//GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, CrystalName);
+			
+		}
+
+		else
+		{
+			
 		}
 	}	
 }

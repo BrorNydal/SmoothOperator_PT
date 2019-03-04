@@ -39,7 +39,13 @@ void AToddlerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	
+	if (Launched == true) //If Toddler has been launched
+	{
+		if (GetCharacterMovement()->IsMovingOnGround() == true) //Check if toddler is on ground, if he is, then he has landed
+		{
+			Launched = false;
+		}
+	}
 }
 
 // Called to bind functionality to input
@@ -140,8 +146,8 @@ void AToddlerCharacter::Interact() //Trying to replicate the blueprint
 			TheBear = Cast<ABearCharacter>(AllBears[0]);
 
 			InteractableActor->Destroy();
-			TheBear->NumberOfCrystals += 1;
-			FString CrystalName = FString("Crystal" + FString::FromInt(TheBear->NumberOfCrystals));
+			TheBear->PickedUpCrystals += 1;
+			FString CrystalName = FString("Crystal" + FString::FromInt(TheBear->PickedUpCrystals));
 			TheBear->Crystals.Add(CrystalName);
 			GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, CrystalName);
 		}
