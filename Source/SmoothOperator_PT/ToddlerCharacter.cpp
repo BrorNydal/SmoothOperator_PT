@@ -2,6 +2,7 @@
 
 #include "ToddlerCharacter.h"
 #include "BearCharacter.h"
+#include "CrystalActor.h"
 #include "Components/InputComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -61,11 +62,16 @@ void AToddlerCharacter::Interactable(UPrimitiveComponent *OverlappedComp, AActor
 		//UE_LOG(LogTemp, Warning, TEXT("BeginOverlap"));
 		if (OtherActor->IsA(ABearCharacter::StaticClass()))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Toddler_Begin_Overlap_Bear"));
+			//UE_LOG(LogTemp, Warning, TEXT("Toddler_Begin_Overlap_Bear"));
 			InteractableActor = OtherActor;
 			ToddlerCanInteract = true;
 		}//Must use else if-statements after this, so bool ToddlerCanInteract works Correctly
-		
+		else if (OtherActor->IsA(ACrystalActor::StaticClass()))
+		{
+			//UE_LOG(LogTemp, Warning, TEXT("Toddler_Begin_Overlap_Crystal"));
+			InteractableActor = OtherActor;
+			ToddlerCanInteract = true;
+		}
 	}
 }
 
@@ -77,9 +83,9 @@ void AToddlerCharacter::NonInteractable(UPrimitiveComponent *OverlappedComp, AAc
 	if (OtherActor && OtherActor != this && OtherComp)
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("BeginOverlap"));
-		if (OtherActor->IsA(ABearCharacter::StaticClass()))
+		if (OtherActor == InteractableActor)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Toddler_End_Overlap_Bear"));
+			UE_LOG(LogTemp, Warning, TEXT("Toddler_End_Overlap_InteractableActor"));
 			ToddlerCanInteract = false;		
 			//InteractableActor->ClearActorLabel();
 		}//Must use else if-statements after this, so bool ToddlerCanInteract works Correctly
@@ -114,12 +120,12 @@ void AToddlerCharacter::RideBear()
 void AToddlerCharacter::Interact() //Trying to replicate the blueprint
 {
 	if (GetCharacterMovement()->IsMovingOnGround() == true && ToddlerCanInteract == true)
-	{
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllBears); //Get all bears
-		TheBear = Cast<ABearCharacter>(AllBears[0]);
-		
-		if (TheBear == InteractableActor)
+	{		
+		if (InteractableActor->IsA(ABearCharacter::StaticClass()))
 		{
+			UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllBears); //Get all bears
+			TheBear = Cast<ABearCharacter>(AllBears[0]);
+
 			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 			AttachToComponent(TheBear->GetMesh(), FAttachmentTransformRules::KeepWorldTransform);
 			SetActorLocation(TheBear->GetActorLocation());
@@ -127,6 +133,17 @@ void AToddlerCharacter::Interact() //Trying to replicate the blueprint
 			TheBear->IsRiding = true;	
 			if(Controller)
 				Controller->Possess(TheBear);
+		}
+		else if (InteractableActor->IsA(ACrystalActor::StaticClass()))
+		{
+			UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllBears); //Get all bears
+			TheBear = Cast<ABearCharacter>(AllBears[0]);
+
+			InteractableActor->Destroy();
+			TheBear->NumberOfCrystals += 1;
+			FString CrystalName = FString("Crystal" + FString::FromInt(TheBear->NumberOfCrystals));
+			TheBear->Crystals.Add(CrystalName);
+			GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, CrystalName);
 		}
 	}
 }

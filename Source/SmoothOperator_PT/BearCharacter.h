@@ -8,6 +8,7 @@
 
 class USphereComponent;
 class AToddlerCharacter;
+class ACrystalActor;
 class UCharacterMovementComponent;
 
 UCLASS()
@@ -64,6 +65,9 @@ public:
 
 	TArray<AActor*> AllToddlers;
 	AToddlerCharacter *TheToddler;
+	TArray<FString> Crystals;
+	int NumberOfCrystals{ 0 };
+	bool AllCrystalsCollected{ false };
 
 private:
 	void Swap();	//Swap between characters

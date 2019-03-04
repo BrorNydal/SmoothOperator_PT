@@ -2,6 +2,7 @@
 
 #include "BearCharacter.h"
 #include "ToddlerCharacter.h"
+#include "CrystalActor.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/MeshComponent.h"
@@ -40,7 +41,11 @@ void ABearCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-
+	if (NumberOfCrystals == 4)
+	{
+		AllCrystalsCollected = true;
+		GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, TEXT("All Crystals Collected"));
+	}
 	
 }
 
@@ -82,11 +87,16 @@ void ABearCharacter::Interactable(UPrimitiveComponent * OverlappedComp, AActor *
 		//UE_LOG(LogTemp, Warning, TEXT("BeginOverlap"));
 		if (OtherActor->IsA(AToddlerCharacter::StaticClass()))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Bear_Begin_Overlap_Toddler"));
+			//UE_LOG(LogTemp, Warning, TEXT("Bear_Begin_Overlap_Toddler"));
 			InteractableActor = OtherActor;
 			BearCanInteract = true;
 		}//Must use else if-statements after this, so bool ToddlerCanInteract works Correctly
-		
+		else if (OtherActor->IsA(ACrystalActor::StaticClass()))
+		{
+			//UE_LOG(LogTemp, Warning, TEXT("Bear_Begin_Overlap_Crystal"));
+			InteractableActor = OtherActor;
+			BearCanInteract = true;
+		}
 	}
 }
 
@@ -100,7 +110,7 @@ void ABearCharacter::NonInteractable(UPrimitiveComponent * OverlappedComp, AActo
 		//UE_LOG(LogTemp, Warning, TEXT("BeginOverlap"));
 		if (OtherActor->IsA(AToddlerCharacter::StaticClass()))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Bear_End_Overlap_Toddler"));
+			//UE_LOG(LogTemp, Warning, TEXT("Bear_End_Overlap_Toddler"));
 			BearCanInteract = false;
 			//InteractableActor->ClearActorLabel();
 		}//Must use else if-statements after this, so bool ToddlerCanInteract works Correctly
@@ -113,19 +123,26 @@ void ABearCharacter::Interact()
 {
 	if (GetCharacterMovement()->IsMovingOnGround() == true && BearCanInteract == true) //If Bear is on ground, and has an interactable object in range
 	{
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AToddlerCharacter::StaticClass(), AllToddlers);
-		TheToddler = Cast<AToddlerCharacter>(AllToddlers[0]);
-
 		if (TheToddler == InteractableActor) 
 		{
+			UGameplayStatics::GetAllActorsOfClass(GetWorld(), AToddlerCharacter::StaticClass(), AllToddlers);
+			TheToddler = Cast<AToddlerCharacter>(AllToddlers[0]);
+
 			TheToddler->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 			TheToddler->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepWorldTransform);
 			TheToddler->SetActorLocation(GetActorLocation());
 			TheToddler->SetActorHiddenInGame(true);
 			IsRiding = true;
 		}
-	}
-	
+		else if (InteractableActor->IsA(ACrystalActor::StaticClass()))
+		{
+			InteractableActor->Destroy();
+			NumberOfCrystals += 1;
+			FString CrystalName = FString("Crystal" + FString::FromInt(NumberOfCrystals));
+			Crystals.Add(CrystalName);
+			//GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, CrystalName);
+		}
+	}	
 }
 
 

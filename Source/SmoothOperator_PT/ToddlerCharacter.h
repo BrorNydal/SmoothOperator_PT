@@ -8,6 +8,7 @@
 
 class USphereComponent;
 class ABearCharacter;
+class ACrystalActor;
 
 UCLASS()
 class SMOOTHOPERATOR_PT_API AToddlerCharacter : public ACharacter
@@ -57,9 +58,10 @@ public:
 		AActor *InteractableActor;
 
 	TArray<AActor*> AllBears;
-	ABearCharacter *TheBear;
+	ABearCharacter *TheBear;	
 
 private:
 	void Interact();
-	bool RidingBear = false;
+	
+	
 };
