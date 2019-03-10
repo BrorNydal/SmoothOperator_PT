@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Door.generated.h"
+#include "MenuManager.generated.h"
 
 UCLASS()
-class SMOOTHOPERATOR_PT_API ADoor : public AActor
+class SMOOTHOPERATOR_PT_API AMenuManager : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ADoor();
+	AMenuManager();
 
 protected:
 	// Called when the game starts or when spawned
