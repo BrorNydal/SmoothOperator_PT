@@ -45,7 +45,12 @@ void AToddlerCharacter::Tick(float DeltaTime)
 		{
 			Launched = false;
 		}
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllBears); //Get all bears
+		TheBear = Cast<ABearCharacter>(AllBears[0]);
+		
+		AddMovementInput(TheBear->GetActorForwardVector(), 2000.0f);
 	}
+
 }
 
 // Called to bind functionality to input
@@ -94,8 +99,7 @@ void AToddlerCharacter::NonInteractable(UPrimitiveComponent *OverlappedComp, AAc
 			UE_LOG(LogTemp, Warning, TEXT("Toddler_End_Overlap_InteractableActor"));
 			ToddlerCanInteract = false;		
 			//InteractableActor->ClearActorLabel();
-		}//Must use else if-statements after this, so bool ToddlerCanInteract works Correctly
-		
+		}//Must use else if-statements after this, so bool ToddlerCanInteract works Correctly		
 	}
 }
 
@@ -110,19 +114,6 @@ void AToddlerCharacter::Swap() //Get all bears, possess bear
 	}	
 }
 
-void AToddlerCharacter::RideBear()
-{
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllBears); //Get all bears
-	TheBear = Cast<ABearCharacter>(AllBears[0]);
-
-	SetActorHiddenInGame(true);
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	TheBear->IsRiding = true;
-
-	if (Controller)
-		Controller->Possess(TheBear);
-}
-
 void AToddlerCharacter::Interact() //Trying to replicate the blueprint
 {
 	if (GetCharacterMovement()->IsMovingOnGround() == true && ToddlerCanInteract == true)
@@ -134,9 +125,9 @@ void AToddlerCharacter::Interact() //Trying to replicate the blueprint
 
 			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 			AttachToComponent(TheBear->GetMesh(), FAttachmentTransformRules::KeepWorldTransform);
-			SetActorLocation(TheBear->GetActorLocation());
-			SetActorHiddenInGame(true);
-			TheBear->IsRiding = true;	
+			SetActorLocation(TheBear->GetMesh()->GetSocketLocation(TEXT("MountSocket")) + FVector(0.0f, 0.0f, 50.0f));
+			SetActorRotation(TheBear->GetMesh()->GetSocketRotation(TEXT("MountSocket")));			
+			IsRiding = true;	
 			if(Controller)
 				Controller->Possess(TheBear);
 		}

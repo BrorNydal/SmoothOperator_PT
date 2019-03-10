@@ -30,14 +30,14 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	
-		USphereComponent *InteractionRadius; //Radius that will in the future decide what the character can interact with
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool ToddlerCanInteract = false; // Bool that will decide if the character can interact
+		USphereComponent *InteractionRadius; //Radius that will in the future decide what the character can interact with		
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool Launched = false; //Has Toddler been launched
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool IsRiding = false; //Is toddler riding bear		
 
 	UFUNCTION()
 		void Interactable(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
@@ -49,22 +49,14 @@ public:
 							UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool RightRotation = false;	//Bool to decide which driection to turn (animation)
-
-	UFUNCTION(BlueprintCallable)
-		void Swap();		//Swapping characters function
-
-	UFUNCTION(BlueprintCallable)
-		void RideBear();
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		AActor *InteractableActor;
-
-	TArray<AActor*> AllBears;
-	ABearCharacter *TheBear;	
+		bool RightRotation = false;	//Bool to decide which driection to turn (animation)		
 
 private:
+
+	void Swap();		//Swapping characters function		
+	bool ToddlerCanInteract = false; // Bool that will decide if the character can interact
 	void Interact();
-	
-	
+	AActor *InteractableActor;
+	TArray<AActor*> AllBears;
+	ABearCharacter *TheBear;
 };

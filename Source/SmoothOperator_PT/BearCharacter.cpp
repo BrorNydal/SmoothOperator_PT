@@ -24,9 +24,6 @@ ABearCharacter::ABearCharacter()
 	InteractionRadius->SetupAttachment(RootComponent);
 	InteractionRadius->OnComponentBeginOverlap.AddDynamic(this, &ABearCharacter::Interactable);
 	InteractionRadius->OnComponentEndOverlap.AddDynamic(this, &ABearCharacter::NonInteractable);	
-
-	BearSocketMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SocketMesh"));
-	BearSocketMesh->SetupAttachment(GetMesh());
 }
 
 // Called when the game starts or when spawned
@@ -60,18 +57,17 @@ void ABearCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 
 void ABearCharacter::Launch() //Find all toddlers, possess the toddler, set set toddler status, 'Launch'=='jump' in bpBearCharacter
-{	
-	if (IsRiding == true && GetCharacterMovement()->IsMovingOnGround() == true)
-	{
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AToddlerCharacter::StaticClass(), AllToddlers);
-		TheToddler = Cast<AToddlerCharacter>(AllToddlers[0]);
-		
+{
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AToddlerCharacter::StaticClass(), AllToddlers);
+	TheToddler = Cast<AToddlerCharacter>(AllToddlers[0]);
+	if (TheToddler->IsRiding == true && GetCharacterMovement()->IsMovingOnGround() == true)
+	{		
 		Controller->Possess(TheToddler); //Possess Toddler
 		TheToddler->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform); //Keep initial transform
 		TheToddler->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics); //Set 'No Collision' -> 'Normal Collision'
 		TheToddler->SetActorLocation(GetActorLocation() + FVector(0.0f, 0.0f, 30.0f)); //Set Initial launch position
 		TheToddler->SetActorHiddenInGame(false);
-		IsRiding = false;	
+		TheToddler->IsRiding = false;	
 		TheToddler->Jump(); //Call character pre-built 'jump' function
 		TheToddler->Launched = true;		
 	}
@@ -130,10 +126,10 @@ void ABearCharacter::Interact()
 			TheToddler = Cast<AToddlerCharacter>(AllToddlers[0]);
 
 			TheToddler->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision); //Set Collision 'Normal Collision' -> 'No Collision'
-			TheToddler->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepWorldTransform); //Keep Bear transform
-			//TheToddler->SetActorLocation(GetActorLocation());
-			TheToddler->SetActorHiddenInGame(true);
-			IsRiding = true;			
+			TheToddler->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepWorldTransform); //Keep Bear transform			
+			TheToddler->SetActorLocation(GetMesh()->GetSocketLocation(TEXT("MountSocket")) + FVector(0.0f, 0.0f, 50.0f)); 
+			TheToddler->SetActorRotation(GetMesh()->GetSocketRotation(TEXT("MountSocket")));								//PlaceOnSocket
+			TheToddler->IsRiding = true;			
 		}
 
 		else if (InteractableActor->IsA(ACrystalActor::StaticClass()))
@@ -155,11 +151,13 @@ void ABearCharacter::Interact()
 
 
 void ABearCharacter::Swap() //Find all toddlers, possess toddler
-{	
-	if ((IsRiding == false) && (GetMovementComponent()->IsMovingOnGround() == true))
+{
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AToddlerCharacter::StaticClass(), AllToddlers);
+	TheToddler = Cast<AToddlerCharacter>(AllToddlers[0]);
+
+	if ((TheToddler->IsRiding == false) && (GetMovementComponent()->IsMovingOnGround() == true))
 	{
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AToddlerCharacter::StaticClass(), AllToddlers);
-		TheToddler = Cast<AToddlerCharacter>(AllToddlers[0]);
+		
 		GEngine->AddOnScreenDebugMessage(0, 0.5f, FColor::Blue, TEXT("Swapping . . . "));
 		Controller->Possess(TheToddler);
 	}

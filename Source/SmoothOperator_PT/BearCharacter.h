@@ -30,17 +30,12 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-		
-	USphereComponent *InteractionRadius;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool IsRiding = false; //Is toddler riding bear		
+		USphereComponent *InteractionRadius;	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) //For future use when adding animation for turning, this be the bool to decide which turn animation to apply (left/right)
-		bool RightRotation = false;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		USkeletalMeshComponent *BearSocketMesh;		
+		bool RightRotation = false;		
 
 	UFUNCTION()
 		void Interactable(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
@@ -51,19 +46,20 @@ public:
 		void NonInteractable(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 			UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);	
 
-	//TSubclassOf<AToddlerCharacter> bpToddler;
-
-	TArray<AActor*> AllToddlers;
-	AToddlerCharacter *TheToddler;
-	TArray<FString> Crystals;
 	int PickedUpCrystals{ 0 };
-	bool AllCrystalsCollected{ false };
-	FString DebugName;
+	TArray<FString> Crystals;
 
 private:
+
 	void Swap();	//Swap between characters
 	void Interact(); //Interact with Characters and Objects
 	bool BearCanInteract = false;	
 	void Launch();	//Launch toddler in the air when IsRiding == true
 	AActor *InteractableActor;
+	TArray<AActor*> AllToddlers;
+	AToddlerCharacter *TheToddler;
+	
+	
+	bool AllCrystalsCollected{ false };
+	FString DebugName;
 };
