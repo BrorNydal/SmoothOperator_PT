@@ -13,6 +13,7 @@
 #include "GameFramework/Character.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "UObject/Object.h"
+#include "Kismet/KismetMathLibrary.h"
 
 
 // Sets default values
@@ -40,9 +41,30 @@ void AToddlerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
+	IsMovingOnGround = GetCharacterMovement()->IsMovingOnGround();
+
+	if (IsMovingOnGround == true)
+	{		
+		SetActorRotation(FRotator(0.0f, GetActorRotation().Yaw, 0.0f)); //Bug-Fix for character walking in unnatural angle		
+	}
+	else
+	{
+		FRotator AirRotationLookAt = UKismetMathLibrary::FindLookAtRotation(
+			GetActorLocation(),
+			GetVelocity() + GetActorLocation()
+		);
+		FRotator AirRotation = FQuat::Slerp(
+			GetActorRotation().Quaternion(),
+			AirRotationLookAt.Quaternion(),
+			0.1f
+		).Rotator();
+		SetActorRotation(AirRotation);
+		GetMesh()->GetAnimInstance();
+	}
+
 	if (Launched == true) //If Toddler has been launched
 	{
-		if (GetCharacterMovement()->IsMovingOnGround() == true) //Check if toddler is on ground, if he is, then he has landed
+		if (IsMovingOnGround) //Check if toddler is on ground, if he is, then he has landed
 		{
 			Launched = false;
 		}
@@ -50,6 +72,15 @@ void AToddlerCharacter::Tick(float DeltaTime)
 		TheBear = Cast<ABearCharacter>(AllBears[0]);
 		
 		AddMovementInput(TheBear->GetActorForwardVector(), 2000.0f);
+	}
+
+	if (IsCrawling == true) //Sets stand v Crawl
+	{
+		GetCharacterMovement()->bWantsToCrouch = true;
+	}
+	else
+	{
+		GetCharacterMovement()->bWantsToCrouch = false;
 	}
 
 }
@@ -61,6 +92,7 @@ void AToddlerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	InputComponent->BindAction("Swap", IE_Pressed, this, &AToddlerCharacter::Swap);
 	InputComponent->BindAction("Interact", IE_Pressed, this, &AToddlerCharacter::Interact);	
+	InputComponent->BindAction("Crawl", IE_Pressed, this, &AToddlerCharacter::Crawl);
 }
 
 void AToddlerCharacter::Interactable(UPrimitiveComponent *OverlappedComp, AActor *OtherActor,
@@ -118,7 +150,7 @@ void AToddlerCharacter::Swap() //Get all bears, possess bear
 
 void AToddlerCharacter::Interact() //Trying to replicate the blueprint
 {
-	if (GetCharacterMovement()->IsMovingOnGround() == true && ToddlerCanInteract == true)
+	if (IsMovingOnGround == true && ToddlerCanInteract == true)
 	{		
 		if (InteractableActor->IsA(ABearCharacter::StaticClass()))
 		{
@@ -148,4 +180,14 @@ void AToddlerCharacter::Interact() //Trying to replicate the blueprint
 	}
 }
 
-
+void AToddlerCharacter::Crawl()
+{
+	if (IsMovingOnGround == true && IsCrawling == false)
+	{
+		IsCrawling = true;
+	}
+	else if (IsMovingOnGround == true && IsCrawling == true)
+	{
+		IsCrawling = false;
+	}
+}

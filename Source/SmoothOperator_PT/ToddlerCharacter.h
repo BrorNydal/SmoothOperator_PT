@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Engine/Classes/Animation/AnimSequence.h"
 #include "ToddlerCharacter.generated.h"
 
 class USphereComponent;
@@ -56,6 +58,11 @@ private:
 	void Swap();		//Swapping characters function		
 	bool ToddlerCanInteract = false; // Bool that will decide if the character can interact
 	void Interact();
+	bool IsMovingOnGround;
+	bool IsCrawling = false;
+	//bool Launched
+	void Crawl();
+
 	AActor *InteractableActor;
 	TArray<AActor*> AllBears;
 	ABearCharacter *TheBear;
