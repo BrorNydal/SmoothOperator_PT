@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "MenuManager.generated.h"
 
+
 UCLASS()
 class SMOOTHOPERATOR_PT_API AMenuManager : public AActor
 {
@@ -23,4 +24,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+private:
+	TSubclassOf<class AStartButtonSprite> bpStartButton;
 };

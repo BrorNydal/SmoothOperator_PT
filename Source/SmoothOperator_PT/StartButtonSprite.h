@@ -8,9 +8,8 @@
 #include "InputCoreTypes.h"
 #include "StartButtonSprite.generated.h"
 
-/**
- * 
- */
+class UBoxComponent;
+
 UCLASS()
 class SMOOTHOPERATOR_PT_API AStartButtonSprite : public APaperSpriteActor
 {
@@ -25,5 +24,10 @@ public:
 	void RegisterMouseClick();
 
 	UFUNCTION()
-		void OnMouseClick(AActor * ActorBeingClicked, FKey KeyPressed);
+		void OnMouseClick(AActor *ActorBeingClicked, FKey KeyPressed);
+
+	UPROPERTY(EditAnywhere)
+		UBoxComponent* HitBox;
+
+
 };

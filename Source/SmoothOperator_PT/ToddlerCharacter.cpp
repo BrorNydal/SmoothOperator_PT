@@ -12,6 +12,7 @@
 #include "Engine/Engine.h"
 #include "GameFramework/Character.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "UObject/Object.h"
 
 
 // Sets default values
@@ -83,6 +84,7 @@ void AToddlerCharacter::Interactable(UPrimitiveComponent *OverlappedComp, AActor
 			InteractableActor = OtherActor;
 			ToddlerCanInteract = true;
 		}
+		
 	}
 }
 
@@ -132,7 +134,7 @@ void AToddlerCharacter::Interact() //Trying to replicate the blueprint
 				Controller->Possess(TheBear);
 		}
 		else if (InteractableActor->IsA(ACrystalActor::StaticClass()))
-		{
+		{	
 			UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllBears); //Get all bears
 			TheBear = Cast<ABearCharacter>(AllBears[0]);
 
@@ -142,6 +144,7 @@ void AToddlerCharacter::Interact() //Trying to replicate the blueprint
 			TheBear->Crystals.Add(CrystalName);
 			GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, CrystalName);
 		}
+		
 	}
 }
 

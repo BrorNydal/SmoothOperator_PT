@@ -49,7 +49,7 @@ public:
 							UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool RightRotation = false;	//Bool to decide which driection to turn (animation)		
+		bool RightRotation = false;	//Bool to decide which driection to turn (animation)	
 
 private:
 

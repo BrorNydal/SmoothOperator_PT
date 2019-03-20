@@ -11,6 +11,7 @@
 #include "Engine/World.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Engine/Engine.h"
+#include "ButtonTrigger.h"
 
 
 // Sets default values
@@ -42,7 +43,7 @@ void ABearCharacter::Tick(float DeltaTime)
 	{
 		AllCrystalsCollected = true;
 		GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, TEXT("All Crystals Collected"));
-	}	
+	}		
 }
 
 // Called to bind functionality to input
