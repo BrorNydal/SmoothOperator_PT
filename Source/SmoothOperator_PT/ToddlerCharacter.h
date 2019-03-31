@@ -35,11 +35,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		USphereComponent *InteractionRadius; //Radius that will in the future decide what the character can interact with		
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool Launched = false; //Has Toddler been launched
+	bool Launched = false; //Has Toddler been launched
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool IsRiding = false; //Is toddler riding bear		
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool BlurScreen = false; 
 
 	UFUNCTION()
 		void Interactable(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
@@ -50,20 +52,48 @@ public:
 		void NonInteractable(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 							UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool RightRotation = false;	//Bool to decide which driection to turn (animation)	
+	//Sound :
+
+	UPROPERTY(EditAnywhere)
+		USoundBase* CollectCrystalSound {
+		nullptr
+	};
+
+	UPROPERTY(EditAnywhere)
+		USoundBase* MountSound {
+		nullptr
+	};
+
+	UPROPERTY(EditAnywhere)
+		USoundBase* SwapSound {
+		nullptr
+	};
+
+	
 
 private:
-
+	//Character Interaction and functions
 	void Swap();		//Swapping characters function		
 	bool ToddlerCanInteract = false; // Bool that will decide if the character can interact
-	void Interact();
+	void Interact();		
+
+	//Movement
+	void MoveForward(float AxisValue);
+	void MoveRight(float AxisValue);	
+	
 	bool IsMovingOnGround;
 	bool IsCrawling = false;
-	//bool Launched
 	void Crawl();
 
+	//Communication with actors
 	AActor *InteractableActor;
-	TArray<AActor*> AllBears;
+	TArray<AActor*> AllActorsOfClass;
 	ABearCharacter *TheBear;
+	ACrystalActor *Crystal;
+	
+	//Other Variables
+	float Accuracy = 1.0f; //For Velocity comparisons
+	float Timer = 0.0f;
+	float RotationSpeed = 0.1f;
+	float BlurTimer = 0.0f;
 };

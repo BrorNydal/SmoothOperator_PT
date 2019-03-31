@@ -49,8 +49,34 @@ public:
 	int PickedUpCrystals{ 0 };
 	TArray<FString> Crystals;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float CrystalEnergyMax = 100.0f;
+
+	//Sound :
+
+	UPROPERTY(EditAnywhere)
+		USoundBase* CollectCrystalSound {
+		nullptr
+	};
+
+	UPROPERTY(EditAnywhere)
+		USoundBase* MountSound {
+		nullptr
+	};
+
+	UPROPERTY(EditAnywhere)
+		USoundBase* SwapSound {
+		nullptr
+	};
+
+	UPROPERTY(EditAnywhere)
+		USoundBase* LaunchSound {
+		nullptr
+	};
+
 private:
 
+	float RotationSpeed = 0.1f;
 	void Swap();	//Swap between characters
 	void Interact(); //Interact with Characters and Objects
 	bool BearCanInteract = false;	
@@ -58,8 +84,8 @@ private:
 	AActor *InteractableActor;
 	TArray<AActor*> AllToddlers;
 	AToddlerCharacter *TheToddler;
-	
-	
+	void MoveForward(float AxisValue);
+	void MoveRight(float AxisValue);	
 	bool AllCrystalsCollected{ false };
 	FString DebugName;
 };

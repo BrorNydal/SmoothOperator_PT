@@ -33,6 +33,12 @@ public:
 		ATriggerVolume *Trigger;
 
 	UPROPERTY(EditAnywhere)
+		USoundBase *TriggerSound;
+
+	UPROPERTY(EditAnywhere)
+		USoundBase *MissingCrystalsSound;
+
+	UPROPERTY(EditAnywhere)
 		int CrystalsNeeded;
 
 	void OpenDoor();

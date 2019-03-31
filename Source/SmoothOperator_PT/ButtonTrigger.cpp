@@ -23,7 +23,7 @@ void UButtonTrigger::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	ActorOpeningDoor = GetWorld()->GetFirstPlayerController()->GetPawn();
+	
 	
 }
 
@@ -33,20 +33,25 @@ void UButtonTrigger::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	if (GetWorld())
+		ActorOpeningDoor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+
 	if (Trigger->IsOverlappingActor(ActorOpeningDoor))
 	{
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllBears); //Get all bears
 		TheBear = Cast<ABearCharacter>(AllBears[0]);
 
-		if (TheBear->PickedUpCrystals >= CrystalsNeeded)
+		if (TheBear->PickedUpCrystals >= CrystalsNeeded) //Check if player has collected all the gems
 		{
 			OpenDoor();
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), TriggerSound, ActorOpeningDoor->GetActorLocation());
 		}
 		else
 		{
 			int AmountOfCrystalsNeeded = CrystalsNeeded - TheBear->PickedUpCrystals;
 			FString PrintCrystalsLeft = FString("Need ") + FString::FromInt(AmountOfCrystalsNeeded) + FString(" More Crystals");
 			GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, PrintCrystalsLeft);
+			UGameplayStatics::PlaySound2D(GetWorld(), MissingCrystalsSound);
 		}
 	}
 }

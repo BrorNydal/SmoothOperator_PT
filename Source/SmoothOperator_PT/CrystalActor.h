@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
+class ABearCharacter;
+
 #include "CrystalActor.generated.h"
 
 UCLASS()
@@ -24,4 +27,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	int CrystalsLeft{ 4 };
+	float CrystalEnergy = 20.0f;
+
+private:
+	
 };
