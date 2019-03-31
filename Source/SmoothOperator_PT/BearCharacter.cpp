@@ -189,7 +189,8 @@ void ABearCharacter::Interact()
 			//GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, CrystalName);
 			CrystalEnergyMax += 20;
 			TheToddler->BlurScreen = true;
-			UGameplayStatics::PlaySoundAtLocation(GetWorld(), CollectCrystalSound, GetActorLocation());
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), CollectCrystalSound, GetActorLocation());InteractableActor->ClearActorLabel();
+			BearCanInteract = false;
 		}
 
 		else

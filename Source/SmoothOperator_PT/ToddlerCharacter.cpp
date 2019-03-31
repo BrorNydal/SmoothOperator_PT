@@ -222,6 +222,7 @@ void AToddlerCharacter::Interact() //Trying to replicate the blueprint
 			TheBear->CrystalEnergyMax += 20;
 			BlurScreen = true;
 			UGameplayStatics::PlaySoundAtLocation(GetWorld(), CollectCrystalSound, GetActorLocation());
+			ToddlerCanInteract = false;
 		}
 	}
 }
