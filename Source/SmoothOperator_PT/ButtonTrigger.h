@@ -38,6 +38,8 @@ public:
 	UPROPERTY(EditAnywhere)
 		USoundBase *MissingCrystalsSound;
 
+	FString PrintCrystalsLeft;
+
 	UPROPERTY(EditAnywhere)
 		int CrystalsNeeded;
 

@@ -43,7 +43,16 @@ void ABearCharacter::Tick(float DeltaTime)
 	{
 		AllCrystalsCollected = true;
 		GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, TEXT("All Crystals Collected"));
-	}		
+	}
+	if (ShouldPrintMissingCrystals == true)
+	{
+		TimerMissingCrystals += DeltaTime;
+		if (TimerMissingCrystals > 2.0f)
+		{
+			ShouldPrintMissingCrystals = false;
+			TimerMissingCrystals = 0.0f;
+		}
+	}
 }
 
 // Called to bind functionality to input

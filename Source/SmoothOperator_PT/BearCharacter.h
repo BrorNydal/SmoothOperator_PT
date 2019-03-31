@@ -35,7 +35,7 @@ public:
 		USphereComponent *InteractionRadius;	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) //For future use when adding animation for turning, this be the bool to decide which turn animation to apply (left/right)
-		bool RightRotation = false;		
+		bool ShouldPrintMissingCrystals = false;		
 
 	UFUNCTION()
 		void Interactable(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
@@ -46,7 +46,12 @@ public:
 		void NonInteractable(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 			UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);	
 
-	int PickedUpCrystals{ 0 };
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int PickedUpCrystals{ 0 };
+
+	UPROPERTY(BlueprintReadWrite)
+		FString PrintMissingCrystals;
+
 	TArray<FString> Crystals;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -88,4 +93,5 @@ private:
 	void MoveRight(float AxisValue);	
 	bool AllCrystalsCollected{ false };
 	FString DebugName;
+	float TimerMissingCrystals = 0.0f;
 };

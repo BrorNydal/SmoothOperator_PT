@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "ToddlerCharacter.h"
+#include "ButtonTrigger.h"
+#include "DoorTriggerVolume.h"
 #include "BearCharacter.h"
 #include "CrystalActor.h"
 #include "Components/InputComponent.h"
@@ -156,7 +158,6 @@ void AToddlerCharacter::Interactable(UPrimitiveComponent *OverlappedComp, AActor
 			InteractableActor = OtherActor;
 			ToddlerCanInteract = true;
 		}
-		
 	}
 }
 
@@ -222,7 +223,6 @@ void AToddlerCharacter::Interact() //Trying to replicate the blueprint
 			BlurScreen = true;
 			UGameplayStatics::PlaySoundAtLocation(GetWorld(), CollectCrystalSound, GetActorLocation());
 		}
-		
 	}
 }
 

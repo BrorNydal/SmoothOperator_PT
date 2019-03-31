@@ -49,7 +49,10 @@ void UButtonTrigger::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		else
 		{
 			int AmountOfCrystalsNeeded = CrystalsNeeded - TheBear->PickedUpCrystals;
-			FString PrintCrystalsLeft = FString("Need ") + FString::FromInt(AmountOfCrystalsNeeded) + FString(" More Crystals");
+			PrintCrystalsLeft = FString::FromInt(AmountOfCrystalsNeeded);
+			TheBear->PrintMissingCrystals = PrintCrystalsLeft;
+			TheBear->ShouldPrintMissingCrystals = true;
+			PrintCrystalsLeft = FString("Need ") + FString::FromInt(AmountOfCrystalsNeeded) + FString(" More Crystals");
 			GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, PrintCrystalsLeft);
 			UGameplayStatics::PlaySound2D(GetWorld(), MissingCrystalsSound);
 		}
