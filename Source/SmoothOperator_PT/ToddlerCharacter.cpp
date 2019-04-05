@@ -89,7 +89,9 @@ void AToddlerCharacter::Tick(float DeltaTime)
 			Launched = false;
 		}		
 		AddMovementInput(TheBear->GetActorForwardVector(), 3000.0f);
-	}	
+	}
+
+	
 }
 
 // Called to bind functionality to input
@@ -106,9 +108,10 @@ void AToddlerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 void AToddlerCharacter::MoveForward(float AxisValue)
 {
-	AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisValue);	
+	if (Dead == false)
+		AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisValue);	
 
-	if (GetVelocity() != FVector::ZeroVector && IsMovingOnGround == true)
+	if (GetVelocity() != FVector::ZeroVector && IsMovingOnGround == true && Dead == false)
 	{
 		FRotator FacingRotation = GetVelocity().ToOrientationRotator();
 		FRotator SlerpedRotation = FQuat::Slerp(
@@ -123,9 +126,10 @@ void AToddlerCharacter::MoveForward(float AxisValue)
 
 void AToddlerCharacter::MoveRight(float AxisValue)
 {
-	AddMovementInput(FVector(0.0f, 1.0f, 0.0f), AxisValue);
+	if (Dead == false)
+		AddMovementInput(FVector(0.0f, 1.0f, 0.0f), AxisValue);
 
-	if (GetVelocity() != FVector::ZeroVector && IsMovingOnGround == true)
+	if (GetVelocity() != FVector::ZeroVector && IsMovingOnGround == true && Dead == false)
 	{
 		FRotator FacingRotation = GetVelocity().ToOrientationRotator();
 		FRotator SlerpedRotation = FQuat::Slerp(

@@ -57,6 +57,8 @@ void ABearCharacter::Tick(float DeltaTime)
 	{
 		Dead = true;
 	}
+	
+	
 }
 
 // Called to bind functionality to input
@@ -92,9 +94,10 @@ void ABearCharacter::Launch() //Find all toddlers, possess the toddler, set set 
 
 void ABearCharacter::MoveForward(float AxisValue)
 {
-	AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisValue);
+	if(Dead == false)
+		AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisValue);
 
-	if (GetVelocity() != FVector::ZeroVector)
+	if (GetVelocity() != FVector::ZeroVector && Dead == false)
 	{
 		FRotator FacingRotation = GetVelocity().ToOrientationRotator();
 		FRotator SlerpedRotation = FQuat::Slerp(
@@ -108,9 +111,10 @@ void ABearCharacter::MoveForward(float AxisValue)
 
 void ABearCharacter::MoveRight(float AxisValue)
 {
-	AddMovementInput(FVector(0.0f, 1.0f, 0.0f), AxisValue);
+	if(Dead == false)
+		AddMovementInput(FVector(0.0f, 1.0f, 0.0f), AxisValue);
 
-	if (GetVelocity() != FVector::ZeroVector)
+	if (GetVelocity() != FVector::ZeroVector && Dead == false)
 	{
 		FRotator FacingRotation = GetVelocity().ToOrientationRotator();
 		FRotator SlerpedRotation = FQuat::Slerp(
