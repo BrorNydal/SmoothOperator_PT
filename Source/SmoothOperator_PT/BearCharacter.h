@@ -34,8 +34,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		USphereComponent *InteractionRadius;	
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) //For future use when adding animation for turning, this be the bool to decide which turn animation to apply (left/right)
-		bool ShouldPrintMissingCrystals = false;		
+	UPROPERTY(EditAnywhere, BlueprintReadWrite) 
+		bool ShouldPrintMissingCrystals = false;	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool Dead = false;
 
 	UFUNCTION()
 		void Interactable(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,

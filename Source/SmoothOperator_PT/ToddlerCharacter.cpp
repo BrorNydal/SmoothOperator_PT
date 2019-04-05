@@ -71,6 +71,7 @@ void AToddlerCharacter::Tick(float DeltaTime)
 					
 	}
 
+
 	if (BlurScreen == true)
 	{
 		BlurTimer += DeltaTime;

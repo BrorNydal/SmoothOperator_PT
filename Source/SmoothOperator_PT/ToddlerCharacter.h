@@ -43,7 +43,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool BlurScreen = false; 
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool Dead = false;
 
 	UFUNCTION()
 		void Interactable(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,

@@ -53,6 +53,10 @@ void ABearCharacter::Tick(float DeltaTime)
 			TimerMissingCrystals = 0.0f;
 		}
 	}
+	if (CrystalEnergyMax <= 0)
+	{
+		Dead = true;
+	}
 }
 
 // Called to bind functionality to input
