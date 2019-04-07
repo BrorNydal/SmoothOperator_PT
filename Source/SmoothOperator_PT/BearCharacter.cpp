@@ -12,6 +12,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Engine/Engine.h"
 #include "ButtonTrigger.h"
+#include "ConstructorHelpers.h"
+#include "GameFramework/Actor.h"
 
 
 // Sets default values
@@ -25,13 +27,15 @@ ABearCharacter::ABearCharacter()
 	InteractionRadius->SetupAttachment(RootComponent);
 	InteractionRadius->OnComponentBeginOverlap.AddDynamic(this, &ABearCharacter::Interactable);
 	InteractionRadius->OnComponentEndOverlap.AddDynamic(this, &ABearCharacter::NonInteractable);	
+
+	
 }
 
 // Called when the game starts or when spawned
 void ABearCharacter::BeginPlay()
 {
 	Super::BeginPlay();	
-	
+
 }
 
 // Called every frame
@@ -93,9 +97,11 @@ void ABearCharacter::Launch() //Find all toddlers, possess the toddler, set set 
 }
 
 void ABearCharacter::MoveForward(float AxisValue)
-{
+{	
+	FVector Direction = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetActorForwardVector().GetUnsafeNormal2D();
+
 	if(Dead == false)
-		AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisValue);
+		AddMovementInput(Direction, AxisValue);
 
 	if (GetVelocity() != FVector::ZeroVector && Dead == false)
 	{
@@ -111,8 +117,10 @@ void ABearCharacter::MoveForward(float AxisValue)
 
 void ABearCharacter::MoveRight(float AxisValue)
 {
+	FVector Direction = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetActorRightVector().GetUnsafeNormal2D();
+
 	if(Dead == false)
-		AddMovementInput(FVector(0.0f, 1.0f, 0.0f), AxisValue);
+		AddMovementInput(Direction, AxisValue);
 
 	if (GetVelocity() != FVector::ZeroVector && Dead == false)
 	{

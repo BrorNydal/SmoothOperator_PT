@@ -108,8 +108,10 @@ void AToddlerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 void AToddlerCharacter::MoveForward(float AxisValue)
 {
+	FVector Direction = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetActorForwardVector().GetUnsafeNormal2D();
+
 	if (Dead == false)
-		AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisValue);	
+		AddMovementInput(Direction, AxisValue);
 
 	if (GetVelocity() != FVector::ZeroVector && IsMovingOnGround == true && Dead == false)
 	{
@@ -126,8 +128,10 @@ void AToddlerCharacter::MoveForward(float AxisValue)
 
 void AToddlerCharacter::MoveRight(float AxisValue)
 {
+	FVector Direction = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetActorRightVector().GetUnsafeNormal2D();
+
 	if (Dead == false)
-		AddMovementInput(FVector(0.0f, 1.0f, 0.0f), AxisValue);
+		AddMovementInput(Direction, AxisValue);
 
 	if (GetVelocity() != FVector::ZeroVector && IsMovingOnGround == true && Dead == false)
 	{

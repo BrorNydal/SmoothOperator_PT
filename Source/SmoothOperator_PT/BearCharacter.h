@@ -60,6 +60,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float CrystalEnergyMax = 100.0f;
 
+	ACameraActor *Camera;
+
 	//Sound :
 
 	UPROPERTY(EditAnywhere)
