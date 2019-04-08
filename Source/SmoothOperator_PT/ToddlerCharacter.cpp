@@ -69,7 +69,7 @@ void AToddlerCharacter::Tick(float DeltaTime)
 		).Rotator();
 		SetActorRotation(AirRotation);
 					
-	}
+	} //Find Aerial rotation
 
 
 	if (BlurScreen == true)
@@ -155,13 +155,13 @@ void AToddlerCharacter::Interactable(UPrimitiveComponent *OverlappedComp, AActor
 	if (OtherActor && OtherActor != this && OtherComp)
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("BeginOverlap"));
-		if (OtherActor->IsA(ABearCharacter::StaticClass()))
+		if (OtherActor->IsA(ABearCharacter::StaticClass())) //Priority 1
 		{
 			//UE_LOG(LogTemp, Warning, TEXT("Toddler_Begin_Overlap_Bear"));
 			InteractableActor = OtherActor;
 			ToddlerCanInteract = true;
 		}//Must use else if-statements after this, so bool ToddlerCanInteract works Correctly
-		else if (OtherActor->IsA(ACrystalActor::StaticClass()))
+		else if (OtherActor->IsA(ACrystalActor::StaticClass())) //Priority 2...
 		{
 			//UE_LOG(LogTemp, Warning, TEXT("Toddler_Begin_Overlap_Crystal"));
 			InteractableActor = OtherActor;

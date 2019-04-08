@@ -24,7 +24,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere)
-		UStaticMeshComponent *DoorMesh;
+		USkeletalMeshComponent *DoorMesh;
 
 	void OpenDoor();
 };
