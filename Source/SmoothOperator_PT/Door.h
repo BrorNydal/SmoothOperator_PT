@@ -26,5 +26,10 @@ public:
 	UPROPERTY(EditAnywhere)
 		USkeletalMeshComponent *DoorMesh;
 
+	UPROPERTY(BlueprintReadWrite)
+	bool Open = false;
+
+	float OpenDelay = 0.0f;
+
 	void OpenDoor();
 };

@@ -4,10 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "ButtonTrigger.generated.h"
 
 class ATriggerVolume;
 class ABearCharacter;
+class ADoor;
+
+#include "ButtonTrigger.generated.h"
+
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SMOOTHOPERATOR_PT_API UButtonTrigger : public UActorComponent
@@ -43,9 +47,11 @@ public:
 	UPROPERTY(EditAnywhere)
 		int CrystalsNeeded;
 
+	ADoor* Door;
 	void OpenDoor();
 
 private:
 	TArray<AActor*> AllBears;
 	ABearCharacter *TheBear;
+	bool Triggered{ false };
 };

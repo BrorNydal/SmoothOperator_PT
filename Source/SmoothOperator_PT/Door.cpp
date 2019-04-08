@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Door.h"
-#include "Engine/StaticMesh.h"
+#include "components/SkeletalMeshComponent.h"
+#include "ConstructorHelpers.h"
 
 // Sets default values
 ADoor::ADoor()
@@ -11,6 +12,9 @@ ADoor::ADoor()
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	DoorMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("DoorMesh"));
+	DoorMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	DoorMesh->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
+	DoorMesh->SetupAttachment(RootComponent);
 	
 }
 
@@ -26,10 +30,16 @@ void ADoor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (Open == true)
+	{
+		OpenDelay += DeltaTime;
+		if (OpenDelay > 0.8f)
+			DoorMesh->bPauseAnims = true;
+	}
 }
 
 void ADoor::OpenDoor()
 {
-	this->Destroy(true, true);
+	
 }
 

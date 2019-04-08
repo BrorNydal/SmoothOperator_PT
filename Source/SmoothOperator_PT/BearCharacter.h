@@ -58,7 +58,7 @@ public:
 	TArray<FString> Crystals;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float CrystalEnergyMax = 100.0f;
+		float CrystalEnergyMax = 60.0f;
 
 	ACameraActor *Camera;
 

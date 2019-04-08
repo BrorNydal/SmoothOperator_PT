@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "ButtonTrigger.h"
+#include "Door.h"
 #include "BearCharacter.h"
 #include "GameFramework/Actor.h"
 #include "Engine/TriggerVolume.h"
@@ -63,8 +64,15 @@ void UButtonTrigger::OpenDoor()
 {
 	AActor *Owner = GetOwner();
 
-	if (Owner)
-			Owner->Destroy(true, true);
+	if (Owner->IsA(ADoor::StaticClass()))
+	{
+		Door = Cast<ADoor>(Owner);
+		if (Triggered == false)
+		{
+			Door->Open = true;
+			Triggered = true;
+		}
+	}
 	
 }
 

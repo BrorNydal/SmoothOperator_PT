@@ -27,7 +27,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	int CrystalsLeft{ 4 };
-	float CrystalEnergy = 20.0f;
+	float CrystalEnergy = 5.0f;
 
 private:
 	
