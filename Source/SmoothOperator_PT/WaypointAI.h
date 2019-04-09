@@ -30,13 +30,18 @@ public:
 		TArray<AActor *> waypoints;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
-		float accuracy;
+		float accuracy = 25.0f; //How close befor it can move on to next waypoint
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
-		float speed = 500;
+		float speed = 250.0f;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
-		float rotSpeed;
+		float rotSpeed = 0.1;
 
 	int i = 0;
+
+private:
+	float ShortDelay = 0.0f;
+	bool LastWP = false;
+	
 };

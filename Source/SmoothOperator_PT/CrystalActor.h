@@ -27,7 +27,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	int CrystalsLeft{ 4 };
-	float CrystalEnergy = 5.0f;
+	float CrystalEnergy = 5.0f; //The amount of "Cristal"energy the bear will gain when this is picked up
 
 private:
 	

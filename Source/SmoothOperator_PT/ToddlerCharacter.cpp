@@ -69,10 +69,10 @@ void AToddlerCharacter::Tick(float DeltaTime)
 		).Rotator();
 		SetActorRotation(AirRotation);
 					
-	} //Find Aerial rotation
+	} //Find and set Aerial rotation
 
 
-	if (BlurScreen == true)
+	if (BlurScreen == true) //For Camera effect
 	{
 		BlurTimer += DeltaTime;
 		if (BlurTimer >= 1.0f)
@@ -150,7 +150,7 @@ void AToddlerCharacter::Interactable(UPrimitiveComponent *OverlappedComp, AActor
 								UPrimitiveComponent *OtherComp, int32 OtherBodyIndex, 
 								bool bFromSweep, const FHitResult& SweepResult) //BeginOverlap
 {	
-	GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, TEXT("Hello, Toddler Overlapping"));
+	//GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, TEXT("Hello, Toddler Overlapping"));
 
 	if (OtherActor && OtherActor != this && OtherComp)
 	{
@@ -173,7 +173,7 @@ void AToddlerCharacter::Interactable(UPrimitiveComponent *OverlappedComp, AActor
 void AToddlerCharacter::NonInteractable(UPrimitiveComponent *OverlappedComp, AActor *OtherActor,
 										UPrimitiveComponent *OtherComp, int32 OtherBodyIndex) //EndOverlap
 {
-	GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, TEXT("Bye, Toddler NOT Overlapping"));
+	//GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, TEXT("Bye, Toddler NOT Overlapping"));
 
 	if (OtherActor && OtherActor != this && OtherComp)
 	{
@@ -236,7 +236,7 @@ void AToddlerCharacter::Interact() //Trying to replicate the blueprint
 	}
 }
 
-void AToddlerCharacter::Crawl()
+void AToddlerCharacter::Crawl() //This function is still in consideration for future levels, not currently in use
 {
 	if (IsMovingOnGround == true && IsCrawling == false)
 	{

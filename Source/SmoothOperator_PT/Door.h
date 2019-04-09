@@ -27,7 +27,7 @@ public:
 		USkeletalMeshComponent *DoorMesh;
 
 	UPROPERTY(BlueprintReadWrite)
-	bool Open = false;
+		bool Open = false; //When this is true it will play 'open' anim
 
 	float OpenDelay = 0.0f;
 

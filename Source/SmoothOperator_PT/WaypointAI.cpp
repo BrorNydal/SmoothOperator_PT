@@ -23,6 +23,7 @@ void AWaypoint::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
 	FVector Target = waypoints[i]->GetActorLocation();
 	FVector Direction = Target - GetActorLocation();
 
@@ -46,11 +47,11 @@ void AWaypoint::Tick(float DeltaTime)
 
 	if (GetActorLocation().X <= waypoints[i]->GetActorLocation().X + accuracy &&
 		GetActorLocation().Y <= waypoints[i]->GetActorLocation().Y + accuracy)
-	{
+	{		
 		i += 1;
+		
 		if (i >= waypoints.Num())
-		{
-			i = 0;
-		}
+			i = 0;	
 	}
+	
 }

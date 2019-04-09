@@ -34,7 +34,7 @@ void ADoor::Tick(float DeltaTime)
 	{
 		OpenDelay += DeltaTime;
 		if (OpenDelay > 0.8f)
-			DoorMesh->bPauseAnims = true;
+			DoorMesh->bPauseAnims = true; //Locks the door in place after the delay
 	}
 }
 

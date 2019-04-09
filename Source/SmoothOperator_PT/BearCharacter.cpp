@@ -137,7 +137,7 @@ void ABearCharacter::MoveRight(float AxisValue)
 
 void ABearCharacter::Interactable(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, TEXT("Hello, Bear Overlapping"));
+	//GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, TEXT("Hello, Bear Overlapping"));
 
 	if (OtherActor && OtherActor != this && OtherComp)
 	{
@@ -205,7 +205,7 @@ void ABearCharacter::Interact()
 			//GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, CrystalName);
 			CrystalEnergyMax += 20;
 			TheToddler->BlurScreen = true;
-			UGameplayStatics::PlaySoundAtLocation(GetWorld(), CollectCrystalSound, GetActorLocation());InteractableActor->ClearActorLabel();
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), CollectCrystalSound, GetActorLocation());
 			BearCanInteract = false;
 		}
 
@@ -225,7 +225,7 @@ void ABearCharacter::Swap() //Find all toddlers, possess toddler
 	if ((TheToddler->IsRiding == false) && (GetMovementComponent()->IsMovingOnGround() == true))
 	{
 		TheToddler->BlurScreen = true;
-		GEngine->AddOnScreenDebugMessage(0, 0.5f, FColor::Blue, TEXT("Swapping . . . "));
+		//GEngine->AddOnScreenDebugMessage(0, 0.5f, FColor::Blue, TEXT("Swapping . . . "));
 		Controller->Possess(TheToddler);
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), SwapSound, GetActorLocation());
 	}
