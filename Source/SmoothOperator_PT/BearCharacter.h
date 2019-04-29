@@ -58,7 +58,7 @@ public:
 	TArray<FString> Crystals;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float CrystalEnergyMax = 60.0f; //The timer for the world, the bears energy, when this reaches zero the bear dies and the player lose
+		float CrystalEnergyMax = 140.0f; //The timer for the world, the bears energy, when this reaches zero the bear dies and the player lose
 
 	ACameraActor *Camera;
 

@@ -161,7 +161,7 @@ void ABearCharacter::Interactable(UPrimitiveComponent * OverlappedComp, AActor *
 
 void ABearCharacter::NonInteractable(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex)
 {
-	GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, TEXT("Bye, Bear NOT Overlapping"));
+	//GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, TEXT("Bye, Bear NOT Overlapping"));
 
 	if (OtherActor && OtherActor != this && OtherComp)
 	{
