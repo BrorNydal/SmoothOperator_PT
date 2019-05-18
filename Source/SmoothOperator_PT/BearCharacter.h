@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "MyCharacterBasic.h"
 #include "BearCharacter.generated.h"
 
 class USphereComponent;
@@ -12,7 +12,7 @@ class ACrystalActor;
 class UCharacterMovementComponent;
 
 UCLASS()
-class SMOOTHOPERATOR_PT_API ABearCharacter : public ACharacter
+class SMOOTHOPERATOR_PT_API ABearCharacter : public AMyCharacterBasic
 {
 	GENERATED_BODY()
 
@@ -36,9 +36,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) 
 		bool ShouldPrintMissingCrystals = false;	
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool Dead = false;
+	
 
 	UFUNCTION()
 		void Interactable(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
@@ -59,8 +57,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float CrystalEnergyMax = 140.0f; //The timer for the world, the bears energy, when this reaches zero the bear dies and the player lose
+	
+	UPROPERTY(BlueprintReadWrite)
+		bool AllCrystalsCollected{ false };
 
-	ACameraActor *Camera;
+	bool BearPlaying = false;
 
 	//Sound :
 
@@ -85,18 +86,15 @@ public:
 	};
 
 private:
-
-	float RotationSpeed = 0.1f;
+	
 	void Swap();	//Swap between characters
 	void Interact(); //Interact with Characters and Objects
 	bool BearCanInteract = false;	
 	void Launch();	//Launch toddler in the air when IsRiding == true
 	AActor *InteractableActor;
 	TArray<AActor*> AllToddlers;
-	AToddlerCharacter *TheToddler;
-	void MoveForward(float AxisValue);
-	void MoveRight(float AxisValue);	
-	bool AllCrystalsCollected{ false };
+	AToddlerCharacter *TheToddler;	
+	
 	FString DebugName;
 	float TimerMissingCrystals = 0.0f;
 };

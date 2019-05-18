@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "MyCharacterBasic.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/Classes/Animation/AnimSequence.h"
 #include "ToddlerCharacter.generated.h"
@@ -13,7 +13,7 @@ class ABearCharacter;
 class ACrystalActor;
 
 UCLASS()
-class SMOOTHOPERATOR_PT_API AToddlerCharacter : public ACharacter
+class SMOOTHOPERATOR_PT_API AToddlerCharacter : public AMyCharacterBasic
 {
 	GENERATED_BODY()
 
@@ -41,10 +41,7 @@ public:
 		bool IsRiding = false; //Is toddler riding bear		
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool BlurScreen = false; 
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool Dead = false;
+		bool BlurScreen = false;
 
 
 	UFUNCTION()
@@ -82,10 +79,9 @@ private:
 	void Interact();		
 
 	//Movement
-	void MoveForward(float AxisValue);
-	void MoveRight(float AxisValue);	
+	/*void MoveForward(float AxisValue);
+	void MoveRight(float AxisValue);*/	
 	
-	bool IsMovingOnGround;
 	bool IsCrawling = false;
 	void Crawl();
 

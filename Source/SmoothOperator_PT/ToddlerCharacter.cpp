@@ -39,6 +39,10 @@ void AToddlerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllActorsOfClass); //Get all bears
+
+	if(AllActorsOfClass[0])
+		TheBear = Cast<ABearCharacter>(AllActorsOfClass[0]);
 }
 
 // Called every frame
@@ -101,49 +105,10 @@ void AToddlerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	InputComponent->BindAction("Swap", IE_Pressed, this, &AToddlerCharacter::Swap);
 	InputComponent->BindAction("Interact", IE_Pressed, this, &AToddlerCharacter::Interact);	
-	InputComponent->BindAction("Crawl", IE_Pressed, this, &AToddlerCharacter::Crawl);
-	InputComponent->BindAxis("MoveForward", this, &AToddlerCharacter::MoveForward);
-	InputComponent->BindAxis("MoveRight", this, &AToddlerCharacter::MoveRight);
+	InputComponent->BindAction("Crawl", IE_Pressed, this, &AToddlerCharacter::Crawl);	
 }
 
-void AToddlerCharacter::MoveForward(float AxisValue)
-{
-	FVector Direction = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetActorForwardVector().GetUnsafeNormal2D();
 
-	if (Dead == false)
-		AddMovementInput(Direction, AxisValue);
-
-	if (GetVelocity() != FVector::ZeroVector && IsMovingOnGround == true && Dead == false)
-	{
-		FRotator FacingRotation = GetVelocity().ToOrientationRotator();
-		FRotator SlerpedRotation = FQuat::Slerp(
-			GetActorRotation().Quaternion(),
-			FacingRotation.Quaternion(),
-			RotationSpeed
-		).Rotator();
-		SetActorRotation(SlerpedRotation);
-	}
-	
-}
-
-void AToddlerCharacter::MoveRight(float AxisValue)
-{
-	FVector Direction = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetActorRightVector().GetUnsafeNormal2D();
-
-	if (Dead == false)
-		AddMovementInput(Direction, AxisValue);
-
-	if (GetVelocity() != FVector::ZeroVector && IsMovingOnGround == true && Dead == false)
-	{
-		FRotator FacingRotation = GetVelocity().ToOrientationRotator();
-		FRotator SlerpedRotation = FQuat::Slerp(
-			GetActorRotation().Quaternion(),
-			FacingRotation.Quaternion(),
-			RotationSpeed
-		).Rotator();
-		SetActorRotation(SlerpedRotation);
-	}
-}
 
 
 void AToddlerCharacter::Interactable(UPrimitiveComponent *OverlappedComp, AActor *OtherActor,
@@ -151,6 +116,7 @@ void AToddlerCharacter::Interactable(UPrimitiveComponent *OverlappedComp, AActor
 								bool bFromSweep, const FHitResult& SweepResult) //BeginOverlap
 {	
 	//GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, TEXT("Hello, Toddler Overlapping"));
+	DisplayInteractionButton = true;
 
 	if (OtherActor && OtherActor != this && OtherComp)
 	{
@@ -174,6 +140,7 @@ void AToddlerCharacter::NonInteractable(UPrimitiveComponent *OverlappedComp, AAc
 										UPrimitiveComponent *OtherComp, int32 OtherBodyIndex) //EndOverlap
 {
 	//GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, TEXT("Bye, Toddler NOT Overlapping"));
+	DisplayInteractionButton = false;
 
 	if (OtherActor && OtherActor != this && OtherComp)
 	{
@@ -190,11 +157,10 @@ void AToddlerCharacter::NonInteractable(UPrimitiveComponent *OverlappedComp, AAc
 void AToddlerCharacter::Swap() //Get all bears, possess bear
 {	
 	if (GetMovementComponent()->IsMovingOnGround() == true)
-	{
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllActorsOfClass); //Get all bears
-		TheBear = Cast<ABearCharacter>(AllActorsOfClass[0]);
+	{		
 		GEngine->AddOnScreenDebugMessage(0, 0.5f, FColor::Blue, TEXT("Swapping . . . "));		
 		BlurScreen = true;
+		TheBear->BearPlaying = true;
 		Controller->Possess(TheBear);	
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), SwapSound, GetActorLocation());
 	}	
@@ -206,13 +172,10 @@ void AToddlerCharacter::Interact() //Trying to replicate the blueprint
 	{		
 		if (InteractableActor->IsA(ABearCharacter::StaticClass()))
 		{
-			UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllActorsOfClass); //Get all bears
-			TheBear = Cast<ABearCharacter>(AllActorsOfClass[0]);
-
 			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 			AttachToComponent(TheBear->GetMesh(), FAttachmentTransformRules::KeepWorldTransform);
-			SetActorLocation(TheBear->GetMesh()->GetSocketLocation(TEXT("MountSocket")) + FVector(0.0f, 0.0f, 50.0f));
-			SetActorRotation(TheBear->GetMesh()->GetSocketRotation(TEXT("MountSocket")));			
+			SetActorLocation(TheBear->GetMesh()->GetSocketLocation(TEXT("MountSocket")) + FVector(0.0f, 0.0f, 45.0f));
+			SetActorRotation(TheBear->GetMesh()->GetSocketRotation(TEXT("MountSocket")) + FRotator(-5.0f,180.0f,0.0f));			
 			IsRiding = true;	
 			if(Controller)
 				Controller->Possess(TheBear);
@@ -220,10 +183,7 @@ void AToddlerCharacter::Interact() //Trying to replicate the blueprint
 			UGameplayStatics::PlaySoundAtLocation(GetWorld(), MountSound, GetActorLocation());
 		}
 		else if (InteractableActor->IsA(ACrystalActor::StaticClass()))
-		{	
-			UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllActorsOfClass); //Get all bears
-			TheBear = Cast<ABearCharacter>(AllActorsOfClass[0]);	
-			
+		{
 			InteractableActor->Destroy();
 			TheBear->PickedUpCrystals += 1;
 			FString CrystalName = FString("Crystal" + FString::FromInt(TheBear->PickedUpCrystals)); //Create a Crystal name, for array
