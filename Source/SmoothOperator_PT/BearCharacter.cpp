@@ -88,7 +88,9 @@ void ABearCharacter::Launch() //Find all toddlers, possess the toddler, set set 
 		TheToddler->SetActorHiddenInGame(false);
 		TheToddler->IsRiding = false;	
 		TheToddler->Jump(); //Call character pre-built 'jump' function
-		TheToddler->Launched = true;	
+		TheToddler->Launched = true;
+		TheToddler->ToddlerPlaying = true;
+		BearPlaying = false;
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), LaunchSound, GetActorLocation());
 	}
 }
