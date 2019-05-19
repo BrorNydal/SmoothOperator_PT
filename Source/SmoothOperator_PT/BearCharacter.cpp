@@ -144,7 +144,7 @@ void ABearCharacter::Interact()
 {	
 	if (GetCharacterMovement()->IsMovingOnGround() == true && BearCanInteract == true) //If Bear is on ground, and has an interactable object in range
 	{
-		if (InteractableActor->IsA(AToddlerCharacter::StaticClass())) 
+		if (InteractableActor->IsA(AToddlerCharacter::StaticClass()) && TheToddler->IsRiding==false) 
 		{
 			TheToddler->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision); //Set Collision 'Normal Collision' -> 'No Collision'
 			TheToddler->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepWorldTransform); //Keep Bear transform			
@@ -200,5 +200,18 @@ void ABearCharacter::Swap() //Find all toddlers, possess toddler
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), SwapSound, GetActorLocation());
 		BearPlaying = false;
 		TheToddler->ToddlerPlaying = true;
+	}
+	else if (TheToddler->IsRiding == true && GetCharacterMovement()->IsMovingOnGround() == true)
+	{
+		Controller->Possess(TheToddler); //Possess Toddler
+		TheToddler->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics); //Set 'No Collision' -> 'Normal Collision'
+		TheToddler->SetActorLocation(GetActorLocation() + GetActorRightVector()*80.0f); //Set Initial launch position
+		TheToddler->SetActorRotation(GetActorRotation());
+		TheToddler->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform); //Keep initial transform		
+		TheToddler->SetActorHiddenInGame(false);
+		TheToddler->IsRiding = false;
+		TheToddler->ToddlerPlaying = true;
+		BearPlaying = false;
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), LaunchSound, GetActorLocation());
 	}
 }

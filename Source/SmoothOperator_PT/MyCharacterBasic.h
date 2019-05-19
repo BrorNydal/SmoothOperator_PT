@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Slate/SlateBrushAsset.h"
 #include "MyCharacterBasic.generated.h"
 
 UCLASS()
@@ -32,7 +33,7 @@ public:
 	bool IsMovingOnGround;
 
 	UPROPERTY(BlueprintReadWrite)
-		bool DisplayInteractionButton = false;
+		bool DisplayInteractionButton = false;	
 
 private:
 	void MoveForward(float AxisValue);

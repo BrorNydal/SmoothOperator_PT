@@ -37,7 +37,7 @@ public:
 
 	bool Launched = false; //Has Toddler been launched
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite)
 		bool IsRiding = false; //Is toddler riding bear		
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -45,6 +45,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 		bool ToddlerPlaying = true;
+
+	UPROPERTY(BlueprintReadWrite)
+		bool Walking = false;
 
 	UFUNCTION()
 		void Interactable(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,

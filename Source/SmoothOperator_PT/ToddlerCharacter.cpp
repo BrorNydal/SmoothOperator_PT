@@ -53,10 +53,20 @@ void AToddlerCharacter::Tick(float DeltaTime)
 	IsMovingOnGround = GetCharacterMovement()->IsMovingOnGround();
 	IsCrawling = GetCharacterMovement()->bWantsToCrouch;	
 
+	if (GetVelocity() != FVector::ZeroVector && ToddlerPlaying == true)
+	{
+		Walking = true;
+	}
+	else
+	{
+		Walking = false;
+	}
+
 	if (IsMovingOnGround == true)
 	{		
 		SetActorRotation(FRotator(0.0f, GetActorRotation().Yaw, 0.0f)); //Bug-Fix for character walking in unnatural angle	
 	}
+
 	else
 	{
 		Timer += DeltaTime;
