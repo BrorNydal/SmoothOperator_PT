@@ -161,8 +161,10 @@ void AToddlerCharacter::Swap() //Get all bears, possess bear
 		GEngine->AddOnScreenDebugMessage(0, 0.5f, FColor::Blue, TEXT("Swapping . . . "));		
 		BlurScreen = true;
 		TheBear->BearPlaying = true;
+		ToddlerPlaying = false;
 		Controller->Possess(TheBear);	
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), SwapSound, GetActorLocation());
+		TheBear->FindToddler();
 	}	
 }
 
@@ -181,6 +183,9 @@ void AToddlerCharacter::Interact() //Trying to replicate the blueprint
 				Controller->Possess(TheBear);
 
 			UGameplayStatics::PlaySoundAtLocation(GetWorld(), MountSound, GetActorLocation());
+			TheBear->BearPlaying = true;
+			ToddlerPlaying = false;
+			TheBear->FindToddler();
 		}
 		else if (InteractableActor->IsA(ACrystalActor::StaticClass()))
 		{

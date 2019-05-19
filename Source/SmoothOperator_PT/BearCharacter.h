@@ -61,7 +61,8 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		bool AllCrystalsCollected{ false };
 
-	bool BearPlaying = false;
+	UPROPERTY(BlueprintReadWrite)
+		bool BearPlaying = false;
 
 	//Sound :
 
@@ -84,6 +85,8 @@ public:
 		USoundBase* LaunchSound {
 		nullptr
 	};
+
+	void FindToddler(); //Casts the array to TheToddler
 
 private:
 	

@@ -41,16 +41,7 @@ void ABearCharacter::BeginPlay()
 // Called every frame
 void ABearCharacter::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
-
-	if (BearPlaying == true && TheToddler == nullptr) //Game crashes if the player is not in controll of the character while doing this action
-	{
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AToddlerCharacter::StaticClass(), AllToddlers);
-		if (AllToddlers[0])
-		{
-			TheToddler = Cast<AToddlerCharacter>(AllToddlers[0]);
-		}
-	}
+	Super::Tick(DeltaTime);	
 
 	if (PickedUpCrystals == 4)
 	{
@@ -161,6 +152,8 @@ void ABearCharacter::Interact()
 			TheToddler->SetActorRotation(GetMesh()->GetSocketRotation(TEXT("MountSocket")) + FRotator(-5.0f, 180.0f, 0.0f));								//PlaceOnSocket
 			TheToddler->IsRiding = true;	
 			UGameplayStatics::PlaySoundAtLocation(GetWorld(), MountSound, GetActorLocation());
+			BearPlaying = false;
+			TheToddler->ToddlerPlaying = true;
 		}
 
 		else if (InteractableActor->IsA(ACrystalActor::StaticClass()))
@@ -184,6 +177,19 @@ void ABearCharacter::Interact()
 }
 
 
+void ABearCharacter::FindToddler()
+{
+	if (TheToddler == nullptr) //Game crashes if the player is not in controll of the character while doing this action
+	{
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AToddlerCharacter::StaticClass(), AllToddlers);
+
+		if (AllToddlers[0])
+		{
+			TheToddler = Cast<AToddlerCharacter>(AllToddlers[0]);
+		}
+	}
+}
+
 void ABearCharacter::Swap() //Find all toddlers, possess toddler
 {
 	if ((TheToddler->IsRiding == false) && (GetMovementComponent()->IsMovingOnGround() == true))
@@ -192,5 +198,7 @@ void ABearCharacter::Swap() //Find all toddlers, possess toddler
 		//GEngine->AddOnScreenDebugMessage(0, 0.5f, FColor::Blue, TEXT("Swapping . . . "));
 		Controller->Possess(TheToddler);
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), SwapSound, GetActorLocation());
+		BearPlaying = false;
+		TheToddler->ToddlerPlaying = true;
 	}
 }
