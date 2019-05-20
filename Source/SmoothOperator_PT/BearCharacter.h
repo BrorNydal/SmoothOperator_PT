@@ -97,7 +97,7 @@ private:
 	AActor *InteractableActor;
 	TArray<AActor*> AllToddlers;
 	AToddlerCharacter *TheToddler;	
-	
+	bool FoundToddler = false;
 	FString DebugName;
 	float TimerMissingCrystals = 0.0f;
 };

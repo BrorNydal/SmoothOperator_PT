@@ -39,10 +39,6 @@ void AToddlerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllActorsOfClass); //Get all bears
-
-	if(AllActorsOfClass[0])
-		TheBear = Cast<ABearCharacter>(AllActorsOfClass[0]);
 }
 
 // Called every frame
@@ -51,8 +47,20 @@ void AToddlerCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);	
 	
 	IsMovingOnGround = GetCharacterMovement()->IsMovingOnGround();
-	IsCrawling = GetCharacterMovement()->bWantsToCrouch;	
+	IsCrawling = GetCharacterMovement()->bWantsToCrouch;
 
+	if (FoundBear == false)
+	{
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllActorsOfClass); //Get all bears
+		if (AllActorsOfClass.Num() > 0)
+		{
+			if (AllActorsOfClass[0])
+			{
+				TheBear = Cast<ABearCharacter>(AllActorsOfClass[0]);
+				FoundBear = true;
+			}
+		}
+	}
 	if (GetVelocity() != FVector::ZeroVector && ToddlerPlaying == true)
 	{
 		Walking = true;
@@ -168,7 +176,7 @@ void AToddlerCharacter::Swap() //Get all bears, possess bear
 {	
 	if (GetMovementComponent()->IsMovingOnGround() == true)
 	{		
-		GEngine->AddOnScreenDebugMessage(0, 0.5f, FColor::Blue, TEXT("Swapping . . . "));		
+		//GEngine->AddOnScreenDebugMessage(0, 0.5f, FColor::Blue, TEXT("Swapping . . . "));		
 		BlurScreen = true;
 		TheBear->BearPlaying = true;
 		ToddlerPlaying = false;

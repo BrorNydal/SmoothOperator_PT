@@ -95,10 +95,12 @@ private:
 	TArray<AActor*> AllActorsOfClass;
 	ABearCharacter *TheBear;
 	ACrystalActor *Crystal;
+	bool FoundBear = false;
 	
 	//Other Variables
 	float Accuracy = 1.0f; //For Velocity comparisons
 	float Timer = 0.0f;
 	float RotationSpeed = 0.1f;
 	float BlurTimer = 0.0f;
+	
 };

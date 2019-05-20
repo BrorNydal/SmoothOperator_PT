@@ -43,6 +43,11 @@ void ABearCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);	
 
+	if (FoundToddler == false)
+	{
+		FindToddler();
+		FoundToddler = true;
+	}
 	if (PickedUpCrystals == 4)
 	{
 		AllCrystalsCollected = true;
@@ -185,9 +190,12 @@ void ABearCharacter::FindToddler()
 	{
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AToddlerCharacter::StaticClass(), AllToddlers);
 
-		if (AllToddlers[0])
+		if (AllToddlers.Num() > 0)
 		{
-			TheToddler = Cast<AToddlerCharacter>(AllToddlers[0]);
+			if (AllToddlers[0])
+			{
+				TheToddler = Cast<AToddlerCharacter>(AllToddlers[0]);
+			}
 		}
 	}
 }
@@ -207,7 +215,7 @@ void ABearCharacter::Swap() //Find all toddlers, possess toddler
 	{
 		Controller->Possess(TheToddler); //Possess Toddler
 		TheToddler->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics); //Set 'No Collision' -> 'Normal Collision'
-		TheToddler->SetActorLocation(GetActorLocation() + GetActorRightVector()*80.0f); //Set Initial launch position
+		TheToddler->SetActorLocation(GetActorLocation() + FVector(0.0f, 0.0f, 80.0f)); //Set Initial launch position
 		TheToddler->SetActorRotation(GetActorRotation());
 		TheToddler->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform); //Keep initial transform		
 		TheToddler->SetActorHiddenInGame(false);

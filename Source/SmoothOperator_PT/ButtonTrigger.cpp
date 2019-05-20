@@ -37,7 +37,7 @@ void UButtonTrigger::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	if (GetWorld())
 		ActorOpeningDoor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 
-	if (Trigger->IsOverlappingActor(ActorOpeningDoor))
+	if (Trigger->IsOverlappingActor(ActorOpeningDoor) && Triggered==false)
 	{
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllBears); //Get all bears
 		TheBear = Cast<ABearCharacter>(AllBears[0]);
@@ -46,6 +46,7 @@ void UButtonTrigger::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		{
 			OpenDoor();
 			UGameplayStatics::PlaySoundAtLocation(GetWorld(), TriggerSound, ActorOpeningDoor->GetActorLocation());
+			Triggered = true;
 		}
 		else
 		{
@@ -54,7 +55,7 @@ void UButtonTrigger::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 			TheBear->PrintMissingCrystals = PrintCrystalsLeft;
 			TheBear->ShouldPrintMissingCrystals = true;
 			PrintCrystalsLeft = FString("Need ") + FString::FromInt(AmountOfCrystalsNeeded) + FString(" More Crystals");
-			GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, PrintCrystalsLeft);
+			//GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Emerald, PrintCrystalsLeft);
 			UGameplayStatics::PlaySound2D(GetWorld(), MissingCrystalsSound);
 		}
 	}
