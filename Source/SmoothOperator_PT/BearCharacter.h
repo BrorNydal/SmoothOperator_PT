@@ -31,73 +31,82 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//Interaction :
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)	//Radius that decides what the character can interact with / what is in his reach
 		USphereComponent *InteractionRadius;	
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) 
-		bool ShouldPrintMissingCrystals = false;	
-	
+	UFUNCTION() //On begin overlap
+			void Interactable(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+				UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
+				bool bFromSweep, const FHitResult& SweepResult);
 
-	UFUNCTION()
-		void Interactable(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-			UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
-			bool bFromSweep, const FHitResult& SweepResult);
-
-	UFUNCTION()
+	UFUNCTION() //On end overlap
 		void NonInteractable(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 			UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);	
+	
+	//Cristals :
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite) //If we should print missing cristals to screen
+		bool ShouldPrintMissingCrystals = false;
+
+	UPROPERTY(BlueprintReadWrite) //What to print
+			FString PrintMissingCrystals;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite) //How many cristals we currently have
 		int PickedUpCrystals{ 0 };
 
-	UPROPERTY(BlueprintReadWrite)
-		FString PrintMissingCrystals;
+	TArray<FString> Crystals; //An array with the collected cristals, for debugging purposes	
 
-	TArray<FString> Crystals;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float CrystalEnergyMax = 140.0f; //The timer for the world, the bears energy, when this reaches zero the bear dies and the player lose
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)//The timer for the world, the bears energy, when this reaches zero the bear dies and the player lose
+		float CrystalEnergyMax = 140.0f; 
 	
 	UPROPERTY(BlueprintReadWrite)
 		bool AllCrystalsCollected{ false };
 
+	//Controll :
 	UPROPERTY(BlueprintReadWrite)
 		bool BearPlaying = false;
 
 	//Sound :
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere) //Sound when picking up a cristal
 		USoundBase* CollectCrystalSound {
 		nullptr
 	};
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere)//Sound when mounting, currently not in use
 		USoundBase* MountSound {
 		nullptr
 	};
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere) //Sound when swapping, currently not in use
 		USoundBase* SwapSound {
 		nullptr
 	};
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere) //Sound when launching, currently not in use
 		USoundBase* LaunchSound {
 		nullptr
 	};
 
-	void FindToddler(); //Casts the array to TheToddler
+	
+	void FindToddler(); //Casts the TheToddler to array of all toddlers in the world
 
 private:
-	
+	//Character interaction and functions :
 	void Swap();	//Swap between characters
-	void Interact(); //Interact with Characters and Objects
-	bool BearCanInteract = false;	
 	void Launch();	//Launch toddler in the air when IsRiding == true
+	void Interact(); //Interact with Characters and Objects
+	
+	//Communication with other actors :
 	AActor *InteractableActor;
 	TArray<AActor*> AllToddlers;
 	AToddlerCharacter *TheToddler;	
+	bool BearCanInteract = false;	
 	bool FoundToddler = false;
+
+	//Other :
 	FString DebugName;
 	float TimerMissingCrystals = 0.0f;
 };

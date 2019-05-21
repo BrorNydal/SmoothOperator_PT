@@ -38,5 +38,7 @@ public:
 private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);	
-	float RotationSpeed = 0.1f;
+	float RotationSpeed = 0.1f; //How fast this character rotates
 };
+
+//The parent of both Toddler and Bear, should contain more that they have in common

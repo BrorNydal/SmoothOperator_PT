@@ -33,7 +33,7 @@ public:
 	
 	AActor *ActorOpeningDoor;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere) //The volume that will trigger this button
 		ATriggerVolume *Trigger;
 
 	UPROPERTY(EditAnywhere)
@@ -51,7 +51,7 @@ public:
 	void OpenDoor();
 
 private:
-	TArray<AActor*> AllBears;
-	ABearCharacter *TheBear;
-	bool Triggered{ false };
+	TArray<AActor*> AllBears; //An array where we fill put all bears in
+	ABearCharacter *TheBear; //Fetches the bear from AllBears
+	bool Triggered{ false }; //If the button ha been triggered
 };

@@ -51,12 +51,12 @@ void AToddlerCharacter::Tick(float DeltaTime)
 
 	if (FoundBear == false)
 	{
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllActorsOfClass); //Get all bears
-		if (AllActorsOfClass.Num() > 0)
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllBears); //Get all bears
+		if (AllBears.Num() > 0)
 		{
-			if (AllActorsOfClass[0])
+			if (AllBears[0])
 			{
-				TheBear = Cast<ABearCharacter>(AllActorsOfClass[0]);
+				TheBear = Cast<ABearCharacter>(AllBears[0]);
 				FoundBear = true;
 			}
 		}
@@ -77,9 +77,6 @@ void AToddlerCharacter::Tick(float DeltaTime)
 
 	else
 	{
-		Timer += DeltaTime;
-
-		
 		FRotator AirRotationLookAt = UKismetMathLibrary::FindLookAtRotation(
 			GetActorLocation(),
 			GetVelocity() + GetActorLocation()

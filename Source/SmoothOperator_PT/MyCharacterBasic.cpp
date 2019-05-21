@@ -54,7 +54,7 @@ void AMyCharacterBasic::MoveForward(float AxisValue)
 			RotationSpeed
 		).Rotator();
 		SetActorRotation(SlerpedRotation);
-	}
+	} //Slerp rotation
 }
 
 void AMyCharacterBasic::MoveRight(float AxisValue)
@@ -73,6 +73,6 @@ void AMyCharacterBasic::MoveRight(float AxisValue)
 			RotationSpeed
 		).Rotator();
 		SetActorRotation(SlerpedRotation);
-	}
+	} //Slerp rotation
 }
 

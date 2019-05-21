@@ -45,14 +45,15 @@ void ABearCharacter::Tick(float DeltaTime)
 
 	if (FoundToddler == false)
 	{
-		FindToddler();
-		FoundToddler = true;
+		FindToddler();		
 	}
+
 	if (PickedUpCrystals == 4)
 	{
 		AllCrystalsCollected = true;
 	}
-	if (ShouldPrintMissingCrystals == true)
+
+	if (ShouldPrintMissingCrystals == true) //If it should print missing cristals to the screen, and how long it prints
 	{
 		TimerMissingCrystals += DeltaTime;
 		if (TimerMissingCrystals > 2.0f)
@@ -61,12 +62,11 @@ void ABearCharacter::Tick(float DeltaTime)
 			TimerMissingCrystals = 0.0f;
 		}
 	}
-	if (CrystalEnergyMax <= 0)
+
+	if (CrystalEnergyMax <= 0) //When cristal energy reaches 0, you die
 	{
 		Dead = true;
-	}
-	
-	
+	}	
 }
 
 // Called to bind functionality to input
@@ -195,6 +195,7 @@ void ABearCharacter::FindToddler()
 			if (AllToddlers[0])
 			{
 				TheToddler = Cast<AToddlerCharacter>(AllToddlers[0]);
+				FoundToddler = true;
 			}
 		}
 	}
@@ -211,7 +212,7 @@ void ABearCharacter::Swap() //Find all toddlers, possess toddler
 		BearPlaying = false;
 		TheToddler->ToddlerPlaying = true;
 	}
-	else if (TheToddler->IsRiding == true && GetCharacterMovement()->IsMovingOnGround() == true)
+	else if (TheToddler->IsRiding == true && GetCharacterMovement()->IsMovingOnGround() == true) //When riding will throw toddler carefully off
 	{
 		Controller->Possess(TheToddler); //Possess Toddler
 		TheToddler->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics); //Set 'No Collision' -> 'Normal Collision'

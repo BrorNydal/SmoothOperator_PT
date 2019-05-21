@@ -42,13 +42,13 @@ void UButtonTrigger::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABearCharacter::StaticClass(), AllBears); //Get all bears
 		TheBear = Cast<ABearCharacter>(AllBears[0]);
 
-		if (TheBear->PickedUpCrystals >= CrystalsNeeded) //Check if player has collected all the gems
+		if (TheBear->PickedUpCrystals >= CrystalsNeeded) //Check if player has collected all the cristals
 		{
 			OpenDoor();
 			UGameplayStatics::PlaySoundAtLocation(GetWorld(), TriggerSound, ActorOpeningDoor->GetActorLocation());
 			Triggered = true;
 		}
-		else
+		else //prints how many cristals he is missing, information gathered from the bear class
 		{
 			int AmountOfCrystalsNeeded = CrystalsNeeded - TheBear->PickedUpCrystals;
 			PrintCrystalsLeft = FString::FromInt(AmountOfCrystalsNeeded);
